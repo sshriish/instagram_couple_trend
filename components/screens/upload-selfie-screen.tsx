@@ -33,6 +33,7 @@ export default function UploadSelfieScreen({
   const [isProcessing, setIsProcessing] = useState(false);
   const [loadingTextIndex, setLoadingTextIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,12 +75,20 @@ export default function UploadSelfieScreen({
   const handleGenerate = async () => {
     if (!selectedFile) return;
     setIsProcessing(true);
+    setErrorMsg(null);
 
     const textInterval = setInterval(() => {
       setLoadingTextIndex((prev) => (prev + 1) % loadingTexts.length);
     }, 1500);
 
     try {
+      // Check env vars are loaded
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error("Missing Supabase env vars. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel.");
+      }
+
       const token = crypto.randomUUID();
       const filePath = `partner-a/${token}.jpg`;
 
@@ -87,7 +96,7 @@ export default function UploadSelfieScreen({
         .from("selfies")
         .upload(filePath, selectedFile);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) throw new Error("Storage upload failed: " + uploadError.message);
 
       const { data: urlData } = supabase.storage
         .from("selfies")
@@ -99,7 +108,7 @@ export default function UploadSelfieScreen({
         .from("meme_sessions")
         .insert({ token, nickname: nickname || "babe", selfie_url: selfieUrl });
 
-      if (dbError) throw dbError;
+      if (dbError) throw new Error("Database insert failed: " + dbError.message);
 
       const shareLink = `${window.location.origin}/share/${token}`;
 
@@ -107,16 +116,18 @@ export default function UploadSelfieScreen({
       onUpdateUserData({ selfieUrl, nickname: nickname || "babe", shareLink });
       setIsProcessing(false);
       onNavigate("link-generated");
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       clearInterval(textInterval);
       setIsProcessing(false);
+      setErrorMsg(err?.message || "Something went wrong. Try again.");
     }
   };
 
   const removeSelfie = () => {
     setSelfie(null);
     setSelectedFile(null);
+    setErrorMsg(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -247,6 +258,20 @@ export default function UploadSelfieScreen({
             className="text-center glass border-border/50 h-12 rounded-xl"
           />
         </motion.div>
+
+        {/* Error message */}
+        <AnimatePresence>
+          {errorMsg && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="w-full max-w-xs mb-4 bg-destructive/10 border border-destructive/30 rounded-xl p-3 text-sm text-destructive text-center"
+            >
+              {errorMsg}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
