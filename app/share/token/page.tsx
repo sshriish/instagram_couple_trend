@@ -13,10 +13,7 @@ import type { UserData, AppScreen } from "@/app/page";
 
 export default function SharePage() {
   const { token } = useParams() as { token: string };
-
-  const [screen, setScreen] =
-    useState<AppScreen>("partner-landing");
-
+  const [screen, setScreen] = useState<AppScreen>("partner-landing");
   const [userData, setUserData] = useState<UserData>({
     selfieUrl: null,
     nickname: "",
@@ -42,39 +39,30 @@ export default function SharePage() {
         } as any);
       }
     }
-
     loadSession();
   }, [token]);
+
+  // Fix: match the prop name PartnerUploadScreen expects
+  const handleUpdateUserData = (data: Partial<UserData>) => {
+    setUserData((prev) => ({ ...prev, ...data }));
+  };
 
   return (
     <>
       {screen === "partner-landing" && (
-        <PartnerLandingScreen
-          userData={userData}
-          onNavigate={setScreen}
-        />
+        <PartnerLandingScreen userData={userData} onNavigate={setScreen} />
       )}
-
       {screen === "partner-upload" && (
         <PartnerUploadScreen
-          userData={userData}
-          setUserData={setUserData}
           onNavigate={setScreen}
+          onUpdateUserData={handleUpdateUserData}
         />
       )}
-
       {screen === "meme-reveal" && (
-        <MemeRevealScreen
-          userData={userData}
-          onNavigate={setScreen}
-        />
+        <MemeRevealScreen userData={userData} onNavigate={setScreen} />
       )}
-
       {screen === "final" && (
-        <FinalScreen
-          userData={userData}
-          onNavigate={setScreen}
-        />
+        <FinalScreen userData={userData} onNavigate={setScreen} />
       )}
     </>
   );
