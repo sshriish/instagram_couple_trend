@@ -8,6 +8,7 @@ import {
   RefreshCw,
   Heart,
   Trophy,
+  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { AppScreen, UserData } from "@/app/page";
@@ -21,7 +22,10 @@ interface FinalScreenProps {
 
 const memeEmojis = ["⏰", "🚀", "🪑", "🌍", "💊"];
 
-export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) {
+export default function FinalScreen({
+  userData,
+  onNavigate,
+}: FinalScreenProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -73,6 +77,7 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
           <p className="text-sm text-muted-foreground mb-3">
             You unlocked all the memes:
           </p>
+
           <div className="flex justify-center gap-2 flex-wrap">
             {memeEmojis.map((emoji, i) => (
               <motion.div
@@ -85,6 +90,7 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-2xl">
                   {emoji}
                 </div>
+
                 {userData.selfieUrl && (
                   <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full overflow-hidden ring-2 ring-background">
                     <img
@@ -113,7 +119,11 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
           ].map((stat, i) => (
             <div key={stat.label} className="glass rounded-xl p-3 text-center">
               <span className="text-2xl mb-1 block">{stat.icon}</span>
-              <span className="text-xl font-bold text-primary">{stat.value}</span>
+
+              <span className="text-xl font-bold text-primary">
+                {stat.value}
+              </span>
+
               <span className="text-xs text-muted-foreground block">
                 {stat.label}
               </span>
@@ -132,6 +142,7 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
             <p className="text-sm text-muted-foreground mb-3">
               Send a reaction to {userData.nickname || "your person"}:
             </p>
+
             <div className="flex justify-center gap-3">
               {["😂", "😭", "🥰", "💀", "🤯"].map((emoji) => (
                 <button
@@ -142,6 +153,28 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
                 </button>
               ))}
             </div>
+
+            {/* Private message from partner */}
+            {(userData as any).privateMessage && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.85 }}
+                className="w-full glass rounded-2xl p-4 mt-4 border border-primary/20"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <Lock className="w-4 h-4 text-primary" />
+
+                  <span className="text-sm font-semibold">
+                    Private message from your partner
+                  </span>
+                </div>
+
+                <p className="text-base text-foreground/90 italic">
+                  &quot;{(userData as any).privateMessage}&quot;
+                </p>
+              </motion.div>
+            )}
           </motion.div>
         )}
 
@@ -170,6 +203,7 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
               <Share2 className="w-5 h-5 mr-2" />
               Share to Story
             </Button>
+
             <Button
               variant="outline"
               onClick={() => {}}
@@ -203,7 +237,9 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
           className="mt-6 flex items-center gap-2"
         >
           <Sparkles className="w-4 h-4 text-primary" />
+
           <span className="text-sm font-semibold">LITERALLY ME</span>
+
           <Heart className="w-4 h-4 text-primary fill-primary" />
         </motion.div>
       </div>
