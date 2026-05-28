@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { AppScreen, UserData } from "@/app/page";
 import ParticleField from "@/components/ui/particle-field";
+import { supabase } from "@/lib/supabase";
 
 interface UploadSelfieScreenProps {
   onNavigate: (screen: AppScreen) => void;
@@ -27,6 +28,7 @@ export default function UploadSelfieScreen({
   onUpdateUserData,
 }: UploadSelfieScreenProps) {
   const [selfie, setSelfie] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [nickname, setNickname] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [loadingTextIndex, setLoadingTextIndex] = useState(0);
@@ -36,6 +38,7 @@ export default function UploadSelfieScreen({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelfie(reader.result as string);
@@ -49,6 +52,7 @@ export default function UploadSelfieScreen({
     setIsDragging(false);
     const file = e.dataTransfer.files?.[0];
     if (file && file.type.startsWith("image/")) {
+      setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelfie(reader.result as string);
@@ -68,35 +72,51 @@ export default function UploadSelfieScreen({
   }, []);
 
   const handleGenerate = async () => {
-    if (!selfie) return;
-
+    if (!selectedFile) return;
     setIsProcessing(true);
 
-    // Simulate processing with cycling loading texts
     const textInterval = setInterval(() => {
       setLoadingTextIndex((prev) => (prev + 1) % loadingTexts.length);
     }, 1500);
 
-    // Simulate processing time
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    try {
+      const token = crypto.randomUUID();
+      const filePath = `partner-a/${token}.jpg`;
 
-    clearInterval(textInterval);
+      const { error: uploadError } = await supabase.storage
+        .from("selfies")
+        .upload(filePath, selectedFile);
 
-    // Generate a fake share link
-    const shareLink = `https://literallyme.app/m/${Math.random().toString(36).substring(2, 10)}`;
+      if (uploadError) throw uploadError;
 
-    onUpdateUserData({
-      selfieUrl: selfie,
-      nickname: nickname || "babe",
-      shareLink,
-    });
+      const { data: urlData } = supabase.storage
+        .from("selfies")
+        .getPublicUrl(filePath);
 
-    setIsProcessing(false);
-    onNavigate("link-generated");
+      const selfieUrl = urlData.publicUrl;
+
+      const { error: dbError } = await supabase
+        .from("meme_sessions")
+        .insert({ token, nickname: nickname || "babe", selfie_url: selfieUrl });
+
+      if (dbError) throw dbError;
+
+      const shareLink = `${window.location.origin}/share/${token}`;
+
+      clearInterval(textInterval);
+      onUpdateUserData({ selfieUrl, nickname: nickname || "babe", shareLink });
+      setIsProcessing(false);
+      onNavigate("link-generated");
+    } catch (err) {
+      console.error(err);
+      clearInterval(textInterval);
+      setIsProcessing(false);
+    }
   };
 
   const removeSelfie = () => {
     setSelfie(null);
+    setSelectedFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -113,7 +133,6 @@ export default function UploadSelfieScreen({
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/10" />
       <ParticleField />
 
-      {/* Back button */}
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -124,7 +143,6 @@ export default function UploadSelfieScreen({
       </motion.button>
 
       <div className="relative z-10 w-full max-w-md mx-auto flex flex-col items-center">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -139,7 +157,6 @@ export default function UploadSelfieScreen({
           </p>
         </motion.div>
 
-        {/* Upload area */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -171,8 +188,8 @@ export default function UploadSelfieScreen({
                   relative flex flex-col items-center justify-center
                   w-64 h-64 mx-auto rounded-full cursor-pointer
                   glass border-2 border-dashed transition-all duration-300
-                  ${isDragging 
-                    ? "border-primary bg-primary/10 scale-105" 
+                  ${isDragging
+                    ? "border-primary bg-primary/10 scale-105"
                     : "border-border/50 hover:border-primary/50 hover:bg-muted/30"
                   }
                 `}
@@ -214,7 +231,6 @@ export default function UploadSelfieScreen({
           </AnimatePresence>
         </motion.div>
 
-        {/* Nickname input */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -232,7 +248,6 @@ export default function UploadSelfieScreen({
           />
         </motion.div>
 
-        {/* Generate button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -264,14 +279,13 @@ export default function UploadSelfieScreen({
           </Button>
         </motion.div>
 
-        {/* Privacy note */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
           className="text-xs text-muted-foreground text-center mt-6 max-w-xs"
         >
-          Your photo is processed locally and only shared with your partner through the link you create.
+          Your photo is stored securely and only shared with your partner through the link you create.
         </motion.p>
       </div>
     </motion.div>
