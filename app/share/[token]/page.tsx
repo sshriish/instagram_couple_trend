@@ -34,3 +34,35 @@ export default function SharePage() {
           selfieUrl: data.selfie_url,
           nickname: data.nickname || "",
           shareLink: window.location.href,
+          partnerSelfieUrl: data.partner_selfie_url,
+          privateMessage: data.private_message || "",
+        } as any);
+      }
+    }
+    loadSession();
+  }, [token]);
+
+  const handleUpdateUserData = (data: Partial<UserData>) => {
+    setUserData((prev) => ({ ...prev, ...data }));
+  };
+
+  return (
+    <>
+      {screen === "partner-landing" && (
+        <PartnerLandingScreen userData={userData} onNavigate={setScreen} />
+      )}
+      {screen === "partner-upload" && (
+        <PartnerUploadScreen
+          onNavigate={setScreen}
+          onUpdateUserData={handleUpdateUserData}
+        />
+      )}
+      {screen === "meme-reveal" && (
+        <MemeRevealScreen userData={userData} onNavigate={setScreen} />
+      )}
+      {screen === "final" && (
+        <FinalScreen userData={userData} onNavigate={setScreen} />
+      )}
+    </>
+  );
+}
