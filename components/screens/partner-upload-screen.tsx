@@ -20,29 +20,33 @@ export default function PartnerUploadScreen({
 }: PartnerUploadScreenProps) {
   const { token } = useParams() as { token: string };
   const [selfie, setSelfie] = useState<string | null>(null);
+  const [selfieBlob, setSelfieBlob] = useState<Blob | null>(null);
   const [isUnlocking, setIsUnlocking] = useState(false);
   const [mode, setMode] = useState<"choose" | "camera" | "preview">("choose");
   const [stream, setStream] = useState<MediaStream | null>(null);
+  const [cameraError, setCameraError] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const startWebcam = async () => {
+    setCameraError(null);
+
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      alert("Camera not supported on this browser. Please use Chrome or Safari and make sure you're on HTTPS.");
+      setCameraError("Camera not supported on this browser. Please use Chrome or Safari on HTTPS.");
       return;
     }
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const constraints: MediaStreamConstraints = isMobile
+      ? { video: { facingMode: "user" } }
+      : { video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } } };
+
     try {
-      let mediaStream: MediaStream;
-      try {
-        mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: "user" }, width: { ideal: 1280 }, height: { ideal: 720 } },
-        });
-      } catch {
-        mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-      }
+      const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
       setStream(mediaStream);
       setMode("camera");
+
       const attachStream = () => {
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
@@ -54,11 +58,28 @@ export default function PartnerUploadScreen({
       setTimeout(attachStream, 100);
     } catch (err: any) {
       if (err?.name === "NotAllowedError" || err?.name === "PermissionDeniedError") {
-        alert("Camera access was denied. Please go to your browser settings and allow camera permission for this site, then try again.");
-      } else if (err?.name === "NotFoundError") {
-        alert("No camera found on this device.");
+        setCameraError(
+          "Camera access was denied.\n\niPhone: Settings → Safari → Camera → Allow\nAndroid: tap the camera icon in your address bar and tap Allow."
+        );
+      } else if (err?.name === "NotFoundError" || err?.name === "DevicesNotFoundError") {
+        setCameraError("No camera found on this device.");
+      } else if (err?.name === "NotReadableError" || err?.name === "TrackStartError") {
+        setCameraError("Camera is in use by another app. Close other apps and try again.");
       } else {
-        alert("Could not access camera. Please allow camera permission and try again.\n\nError: " + (err?.message || err));
+        // Fallback — try without any constraints
+        try {
+          const fallback = await navigator.mediaDevices.getUserMedia({ video: true });
+          setStream(fallback);
+          setMode("camera");
+          setTimeout(() => {
+            if (videoRef.current) {
+              videoRef.current.srcObject = fallback;
+              videoRef.current.play().catch(() => {});
+            }
+          }, 100);
+        } catch {
+          setCameraError("Could not access camera. Make sure you're on HTTPS and have granted camera permission.");
+        }
       }
     }
   };
@@ -73,14 +94,18 @@ export default function PartnerUploadScreen({
     if (!videoRef.current || !canvasRef.current) return;
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    // Mirror the image so it looks natural
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0);
-    const dataUrl = canvas.toDataURL("image/jpeg");
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+    canvas.toBlob((blob) => {
+      if (blob) setSelfieBlob(blob);
+    }, "image/jpeg", 0.92);
     setSelfie(dataUrl);
     stopWebcam();
     setMode("preview");
@@ -88,7 +113,9 @@ export default function PartnerUploadScreen({
 
   const removeSelfie = () => {
     setSelfie(null);
+    setSelfieBlob(null);
     setMode("choose");
+    setCameraError(null);
   };
 
   const handleUnlock = async () => {
@@ -96,8 +123,13 @@ export default function PartnerUploadScreen({
     setIsUnlocking(true);
 
     try {
-      const res = await fetch(selfie);
-      const blob = await res.blob();
+      let blob: Blob;
+      if (selfieBlob) {
+        blob = selfieBlob;
+      } else {
+        const res = await fetch(selfie);
+        blob = await res.blob();
+      }
       const fileName = `partner-${token}-${Date.now()}.jpg`;
 
       const { error: uploadError } = await supabase.storage
@@ -197,7 +229,24 @@ export default function PartnerUploadScreen({
           </p>
         </motion.div>
 
-        {mode === "choose" && (
+        {/* Camera error message */}
+        {cameraError && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full mb-4 bg-destructive/10 border border-destructive/30 rounded-xl p-4"
+          >
+            <p className="text-sm text-destructive text-center leading-relaxed whitespace-pre-line">{cameraError}</p>
+            <button
+              onClick={() => { setCameraError(null); startWebcam(); }}
+              className="mt-3 w-full text-sm font-semibold text-destructive underline text-center"
+            >
+              Try again
+            </button>
+          </motion.div>
+        )}
+
+        {mode === "choose" && !cameraError && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -205,14 +254,14 @@ export default function PartnerUploadScreen({
           >
             <button
               onClick={startWebcam}
-              className="relative flex flex-col items-center justify-center w-56 h-56 mx-auto rounded-full cursor-pointer glass border-2 border-dashed border-border/50 hover:border-primary/50 hover:bg-muted/30 transition-all duration-300"
+              className="relative flex flex-col items-center justify-center w-56 h-56 mx-auto rounded-full cursor-pointer glass border-2 border-dashed border-border/50 hover:border-primary/50 hover:bg-muted/30 active:scale-95 transition-all duration-300"
             >
               <div className="flex flex-col items-center gap-3">
                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
                   <Camera className="w-7 h-7 text-primary" />
                 </div>
                 <span className="text-sm text-muted-foreground text-center px-4">
-                  Tap to take a live selfie
+                  Tap to open camera
                 </span>
               </div>
             </button>
@@ -225,7 +274,7 @@ export default function PartnerUploadScreen({
             animate={{ opacity: 1, scale: 1 }}
             className="flex flex-col items-center gap-4 w-full"
           >
-            <div className="relative w-64 h-64 rounded-full overflow-hidden ring-4 ring-primary/50 mx-auto">
+            <div className="relative w-64 h-64 rounded-full overflow-hidden ring-4 ring-primary/50 mx-auto bg-black">
               <video
                 ref={videoRef}
                 autoPlay
@@ -282,7 +331,7 @@ export default function PartnerUploadScreen({
                 className="absolute -bottom-4 left-1/2 -translate-x-1/2 glass rounded-full px-3 py-1 flex items-center gap-1"
               >
                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-xs text-foreground">Face detected</span>
+                <span className="text-xs text-foreground">Ready!</span>
               </motion.div>
             </div>
 
@@ -306,8 +355,8 @@ export default function PartnerUploadScreen({
         >
           <Shield className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
           <p>
-            Your live selfie will only be sent privately to the person who
-            created this link. It won&apos;t be used in any memes.
+            Your live selfie is only shared privately with the person who
+            created this link. It won&apos;t appear in any memes.
           </p>
         </motion.div>
       </div>
