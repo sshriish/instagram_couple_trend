@@ -12,6 +12,12 @@ interface MemeRevealScreenProps {
   onNavigate: (screen: AppScreen) => void;
 }
 
+// faceConfig controls how the face is composited onto each scene.
+// shape: "circle" | "ellipse" — clipping shape
+// blendMode: CSS mix-blend-mode value
+// opacity: overlay opacity (0–1)
+// filter: CSS filter string applied to face image
+// top/left/width/height: positioning as % of the card container
 const QUESTIONS = [
   {
     id: 1,
@@ -20,9 +26,13 @@ const QUESTIONS = [
     emoji: "🪑",
     image: "/images/sofa.png",
     faceTarget: "sender",
-    faceStyle: {
-      top: "18%", left: "50%", transform: "translateX(-50%)",
-      width: "38%", aspectRatio: "1",
+    // Face goes on the left cushion of the sofa
+    faceConfig: {
+      top: "28%", left: "22%", width: "36%", height: "36%",
+      shape: "ellipse",
+      blendMode: "multiply",
+      opacity: 0.82,
+      filter: "contrast(1.05) saturate(0.7) brightness(0.9)",
     },
   },
   {
@@ -32,9 +42,13 @@ const QUESTIONS = [
     emoji: "🚀",
     image: "/images/astronaut.png",
     faceTarget: "sender",
-    faceStyle: {
-      top: "22%", left: "52%", transform: "translateX(-50%)",
-      width: "28%", aspectRatio: "1",
+    // Face fits inside the helmet visor (oval, centered on helmet)
+    faceConfig: {
+      top: "14%", left: "46%", width: "30%", height: "32%",
+      shape: "ellipse",
+      blendMode: "screen",
+      opacity: 0.88,
+      filter: "contrast(1.1) saturate(0.85) brightness(1.05)",
     },
   },
   {
@@ -44,9 +58,13 @@ const QUESTIONS = [
     emoji: "⏰",
     image: "/images/clock.png",
     faceTarget: "sender",
-    faceStyle: {
-      top: "18%", left: "50%", transform: "translateX(-50%)",
-      width: "34%", aspectRatio: "1",
+    // Face fills the clock dial circle
+    faceConfig: {
+      top: "8%", left: "22%", width: "56%", height: "56%",
+      shape: "circle",
+      blendMode: "luminosity",
+      opacity: 0.72,
+      filter: "contrast(1.1) saturate(0.6) brightness(1.0)",
     },
   },
   {
@@ -56,9 +74,13 @@ const QUESTIONS = [
     emoji: "🌍",
     image: "/images/earth.png",
     faceTarget: "receiver",
-    faceStyle: {
-      top: "20%", left: "50%", transform: "translateX(-50%)",
-      width: "40%", aspectRatio: "1",
+    // Face softly overlaid across the whole earth sphere
+    faceConfig: {
+      top: "5%", left: "10%", width: "80%", height: "80%",
+      shape: "circle",
+      blendMode: "soft-light",
+      opacity: 0.60,
+      filter: "contrast(0.9) saturate(0.5) brightness(1.1)",
     },
   },
   {
@@ -68,9 +90,13 @@ const QUESTIONS = [
     emoji: "🩹",
     image: "/images/bandaid.png",
     faceTarget: "sender",
-    faceStyle: {
-      top: "30%", left: "46%", transform: "translateX(-50%)",
-      width: "30%", aspectRatio: "1",
+    // Face on the center gauze pad of the bandaid (rotated ~-40deg bandaid)
+    faceConfig: {
+      top: "30%", left: "30%", width: "38%", height: "38%",
+      shape: "circle",
+      blendMode: "multiply",
+      opacity: 0.80,
+      filter: "contrast(1.05) saturate(0.75) brightness(0.95)",
     },
   },
   {
@@ -80,9 +106,13 @@ const QUESTIONS = [
     emoji: "📏",
     image: "/images/ruler.png",
     faceTarget: "sender",
-    faceStyle: {
-      top: "28%", left: "50%", transform: "translateX(-50%)",
-      width: "28%", aspectRatio: "1",
+    // Face blended on the ruler surface, center-left
+    faceConfig: {
+      top: "28%", left: "20%", width: "34%", height: "34%",
+      shape: "circle",
+      blendMode: "multiply",
+      opacity: 0.75,
+      filter: "contrast(1.0) saturate(0.5) brightness(0.9)",
     },
   },
   {
@@ -92,9 +122,13 @@ const QUESTIONS = [
     emoji: "🍫",
     image: "/images/kitkat.png",
     faceTarget: "sender",
-    faceStyle: {
-      top: "22%", left: "50%", transform: "translateX(-50%)",
-      width: "32%", aspectRatio: "1",
+    // Face on the KitKat bar wrapper center
+    faceConfig: {
+      top: "20%", left: "32%", width: "36%", height: "36%",
+      shape: "circle",
+      blendMode: "multiply",
+      opacity: 0.78,
+      filter: "contrast(1.05) saturate(0.65) brightness(0.85)",
     },
   },
   {
@@ -104,9 +138,13 @@ const QUESTIONS = [
     emoji: "🚗",
     image: "/images/steering.png",
     faceTarget: "sender",
-    faceStyle: {
-      top: "24%", left: "50%", transform: "translateX(-50%)",
-      width: "30%", aspectRatio: "1",
+    // Face inside the center hub/logo area of the steering wheel
+    faceConfig: {
+      top: "26%", left: "28%", width: "44%", height: "44%",
+      shape: "circle",
+      blendMode: "luminosity",
+      opacity: 0.80,
+      filter: "contrast(1.05) saturate(0.7) brightness(1.0)",
     },
   },
   {
@@ -116,9 +154,13 @@ const QUESTIONS = [
     emoji: "☀️",
     image: "/images/sun.png",
     faceTarget: "receiver",
-    faceStyle: {
-      top: "20%", left: "50%", transform: "translateX(-50%)",
-      width: "36%", aspectRatio: "1",
+    // Face inside the circular sun disc at center
+    faceConfig: {
+      top: "22%", left: "28%", width: "44%", height: "44%",
+      shape: "circle",
+      blendMode: "soft-light",
+      opacity: 0.85,
+      filter: "contrast(1.0) saturate(0.7) brightness(1.1)",
     },
   },
   {
@@ -128,9 +170,13 @@ const QUESTIONS = [
     emoji: "👻",
     image: "/images/ghost.png",
     faceTarget: "sender",
-    faceStyle: {
-      top: "16%", left: "50%", transform: "translateX(-50%)",
-      width: "34%", aspectRatio: "1",
+    // Face where the ghost "head" is (upper body of the ghost)
+    faceConfig: {
+      top: "10%", left: "28%", width: "44%", height: "44%",
+      shape: "circle",
+      blendMode: "luminosity",
+      opacity: 0.70,
+      filter: "contrast(1.0) saturate(0.0) brightness(1.15)",
     },
   },
 ];
@@ -288,21 +334,25 @@ function SlideCard({
           className="w-full h-full object-cover"
         />
 
-        {/* Face blended on top */}
+        {/* Face blended on top — per-slide precise config */}
         {faceUrl && (
           <div
-            className="absolute rounded-full overflow-hidden"
+            className="absolute overflow-hidden"
             style={{
-              ...question.faceStyle,
-              mixBlendMode: "luminosity",
-              opacity: 0.75,
+              top: question.faceConfig.top,
+              left: question.faceConfig.left,
+              width: question.faceConfig.width,
+              height: question.faceConfig.height,
+              borderRadius: question.faceConfig.shape === "circle" ? "50%" : "50% / 45%",
+              mixBlendMode: question.faceConfig.blendMode as any,
+              opacity: question.faceConfig.opacity,
             }}
           >
             <img
               src={faceUrl}
               alt="face"
               className="w-full h-full object-cover"
-              style={{ filter: "contrast(1.1) saturate(0.9)" }}
+              style={{ filter: question.faceConfig.filter }}
             />
           </div>
         )}
@@ -523,4 +573,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-                      }
+    }
