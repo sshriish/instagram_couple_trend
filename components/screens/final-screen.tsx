@@ -19,22 +19,25 @@ interface FinalScreenProps {
 const memeEmojis = ["☕", "🪑", "🚀", "⏰", "🌍", "💊", "🧱", "🌊"];
 
 export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) {
-  const [privateMessage, setPrivateMessage] = useState<string | null>(null);
-  const [partnerSelfie, setPartnerSelfie] = useState<string | null>(userData.partnerSelfieUrl);
+  const [privateMessage, setPrivateMessage] = useState<string | null>(
+    userData.privateMessage || null
+  );
+  const [partnerSelfie, setPartnerSelfie] = useState<string | null>(
+    userData.partnerSelfieUrl
+  );
   const [checking, setChecking] = useState(false);
 
-  // Poll Supabase every 5s to see if partner sent a message or selfie
   useEffect(() => {
-    const token = (userData as any).shareLink?.split("/share/")[1];
-    if (!token) return;
+    if (!userData.token) return;
 
     const fetchUpdates = async () => {
       setChecking(true);
       const { data } = await supabase
         .from("meme_sessions")
         .select("private_message, partner_selfie_url")
-        .eq("token", token)
+        .eq("token", userData.token)
         .single();
+
       if (data) {
         if (data.private_message) setPrivateMessage(data.private_message);
         if (data.partner_selfie_url) setPartnerSelfie(data.partner_selfie_url);
@@ -45,7 +48,7 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
     fetchUpdates();
     const interval = setInterval(fetchUpdates, 5000);
     return () => clearInterval(interval);
-  }, [userData]);
+  }, [userData.token]);
 
   return (
     <motion.div
@@ -79,17 +82,21 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
           className="mb-6"
         >
           <h1 className="text-3xl md:text-4xl font-bold mb-3 text-balance">
-            Link sent! Waiting for them… 👀
+            {partnerSelfie ? "They responded! 🎉" : "Waiting for them… 👀"}
           </h1>
           <p className="text-lg text-muted-foreground">
-            This page updates automatically when they respond
+            {partnerSelfie
+              ? "Check out what they sent you"
+              : "This page updates automatically when they respond"}
           </p>
           {checking && (
-            <p className="text-xs text-muted-foreground mt-1 animate-pulse">checking for updates…</p>
+            <p className="text-xs text-muted-foreground mt-1 animate-pulse">
+              checking for updates…
+            </p>
           )}
         </motion.div>
 
-        {/* Partner selfie — shown once they upload */}
+        {/* Partner selfie */}
         {partnerSelfie && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -100,12 +107,16 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
               They uploaded a selfie for you 📸
             </p>
             <div className="w-32 h-32 rounded-full overflow-hidden ring-4 ring-primary/50 mx-auto">
-              <img src={partnerSelfie} alt="Partner selfie" className="w-full h-full object-cover" />
+              <img
+                src={partnerSelfie}
+                alt="Partner selfie"
+                className="w-full h-full object-cover"
+              />
             </div>
           </motion.div>
         )}
 
-        {/* Private message — shown once they send it */}
+        {/* Private message */}
         {privateMessage ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -134,8 +145,7 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              They'll see an option to leave you a private message after viewing the memes.
-              It'll appear here automatically.
+              It'll appear here automatically once they send it.
             </p>
           </motion.div>
         )}
@@ -179,13 +189,21 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
             Create Another Link
           </Button>
           <div className="flex gap-3">
-            <Button variant="outline" onClick={() => {}} className="flex-1 h-12 glass border-border/50 hover:bg-muted/50 rounded-xl">
+            <Button
+              variant="outline"
+              onClick={() => navigator.clipboard.writeText(userData.shareLink)}
+              className="flex-1 h-12 glass border-border/50 hover:bg-muted/50 rounded-xl"
+            >
               <Share2 className="w-5 h-5 mr-2" />
-              Share
+              Copy Link
             </Button>
-            <Button variant="outline" onClick={() => {}} className="flex-1 h-12 glass border-border/50 hover:bg-muted/50 rounded-xl">
+            <Button
+              variant="outline"
+              onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(userData.shareLink)}`, "_blank")}
+              className="flex-1 h-12 glass border-border/50 hover:bg-muted/50 rounded-xl"
+            >
               <MessageCircle className="w-5 h-5 mr-2" />
-              Send
+              WhatsApp
             </Button>
           </div>
         </motion.div>
