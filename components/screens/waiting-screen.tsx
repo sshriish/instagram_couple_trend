@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import type { AppScreen, UserData } from "@/app/page";
 import ParticleField from "@/components/ui/particle-field";
@@ -18,9 +18,9 @@ export default function WaitingScreen({
   onNavigate,
 }: WaitingScreenProps) {
   const [dots, setDots] = useState(".");
+  const [seenToast, setSeenToast] = useState(false);
 
   useEffect(() => {
-    // Animate dots
     const dotInterval = setInterval(() => {
       setDots((prev) => (prev.length >= 3 ? "." : prev + "."));
     }, 500);
@@ -28,11 +28,10 @@ export default function WaitingScreen({
   }, []);
 
   useEffect(() => {
-    // Poll Supabase every 3 seconds
     const poll = setInterval(async () => {
       const { data } = await supabase
         .from("meme_sessions")
-        .select("partner_selfie_url, private_message")
+        .select("partner_selfie_url, private_message, receiver_finished")
         .eq("token", userData.token)
         .single();
 
@@ -44,10 +43,14 @@ export default function WaitingScreen({
         });
         onNavigate("final");
       }
+
+      if (data?.receiver_finished && !seenToast) {
+        setSeenToast(true);
+      }
     }, 3000);
 
     return () => clearInterval(poll);
-  }, [userData.token]);
+  }, [userData.token, seenToast]);
 
   return (
     <motion.div
@@ -59,8 +62,23 @@ export default function WaitingScreen({
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/10" />
       <ParticleField />
 
+      {/* "They've seen it" toast */}
+      <AnimatePresence>
+        {seenToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -60, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -60 }}
+            transition={{ type: "spring", stiffness: 300, damping: 24 }}
+            className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-2xl shadow-2xl"
+          >
+            <span className="text-xl">👀</span>
+            <span className="font-bold text-base">They've seen it!</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="relative z-10 flex flex-col items-center text-center gap-6 max-w-sm">
-        {/* Animated selfie preview */}
         {userData.selfieUrl && (
           <motion.div
             animate={{ scale: [1, 1.05, 1] }}
@@ -84,17 +102,17 @@ export default function WaitingScreen({
           </p>
         </div>
 
-        {/* Pulsing indicator */}
         <motion.div
           animate={{ opacity: [0.4, 1, 0.4] }}
           transition={{ duration: 1.5, repeat: Infinity }}
           className="flex items-center gap-2 glass rounded-full px-4 py-2"
         >
           <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-          <span className="text-sm text-muted-foreground">Checking for response every 3 seconds</span>
+          <span className="text-sm text-muted-foreground">
+            Checking for response every 3 seconds
+          </span>
         </motion.div>
 
-        {/* Share link again */}
         <button
           onClick={() => navigator.clipboard.writeText(userData.shareLink)}
           className="text-sm text-primary underline underline-offset-4"
