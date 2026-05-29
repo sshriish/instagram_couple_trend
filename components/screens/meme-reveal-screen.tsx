@@ -254,12 +254,118 @@ function CloudIntro({ onReady }: { onReady: () => void }) {
         ☁️
       </motion.div>
 
-      {/* Are you ready text */}
+      {/* Teddy bear + tulips — walks in from bottom when clouds split */}
+      <motion.div
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center z-20 select-none"
+        initial={{ y: 300, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 2.0, duration: 1.0, type: "spring", stiffness: 80, damping: 14 }}
+      >
+        {/* Message bubble above teddy */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 3.0, duration: 0.5, type: "spring" }}
+          className="mb-3 bg-white rounded-2xl px-5 py-3 shadow-2xl relative"
+          style={{ maxWidth: "220px" }}
+        >
+          <p className="text-gray-800 text-sm font-semibold text-center leading-snug">
+            🌷 These are for you 🌷
+          </p>
+          {/* Bubble tail */}
+          <div
+            className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0"
+            style={{
+              borderLeft: "10px solid transparent",
+              borderRight: "10px solid transparent",
+              borderTop: "12px solid white",
+            }}
+          />
+        </motion.div>
+
+        {/* Teddy bear SVG */}
+        <motion.div
+          animate={{ rotate: [-3, 3, -3] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 2.2 }}
+          style={{ fontSize: "0px", lineHeight: 0 }}
+        >
+          <svg width="130" height="150" viewBox="0 0 130 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Ears */}
+            <circle cx="28" cy="32" r="18" fill="#C68642"/>
+            <circle cx="28" cy="32" r="11" fill="#E8A96A"/>
+            <circle cx="102" cy="32" r="18" fill="#C68642"/>
+            <circle cx="102" cy="32" r="11" fill="#E8A96A"/>
+            {/* Head */}
+            <circle cx="65" cy="52" r="36" fill="#C68642"/>
+            {/* Face */}
+            <circle cx="65" cy="52" r="22" fill="#E8A96A"/>
+            {/* Eyes */}
+            <circle cx="55" cy="46" r="5" fill="#3B1F0A"/>
+            <circle cx="75" cy="46" r="5" fill="#3B1F0A"/>
+            <circle cx="57" cy="44" r="2" fill="white"/>
+            <circle cx="77" cy="44" r="2" fill="white"/>
+            {/* Nose */}
+            <ellipse cx="65" cy="56" rx="5" ry="4" fill="#3B1F0A"/>
+            {/* Smile */}
+            <path d="M57 62 Q65 70 73 62" stroke="#3B1F0A" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+            {/* Body */}
+            <ellipse cx="65" cy="112" rx="32" ry="36" fill="#C68642"/>
+            {/* Tummy */}
+            <ellipse cx="65" cy="112" rx="20" ry="22" fill="#E8A96A"/>
+            {/* Left arm holding tulips */}
+            <path d="M33 95 Q10 85 8 70" stroke="#C68642" strokeWidth="16" strokeLinecap="round" fill="none"/>
+            {/* Right arm */}
+            <path d="M97 95 Q118 88 120 75" stroke="#C68642" strokeWidth="16" strokeLinecap="round" fill="none"/>
+            {/* Legs */}
+            <ellipse cx="48" cy="145" rx="14" ry="10" fill="#C68642"/>
+            <ellipse cx="82" cy="145" rx="14" ry="10" fill="#C68642"/>
+
+            {/* Tulip stems */}
+            <line x1="8" y1="70" x2="12" y2="20" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="4" y1="68" x2="2" y2="18" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="12" y1="72" x2="20" y2="22" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
+            {/* Leaves */}
+            <path d="M9 50 Q0 42 4 34 Q12 44 9 50Z" fill="#388E3C"/>
+            <path d="M6 48 Q16 40 18 30 Q8 38 6 48Z" fill="#43A047"/>
+            {/* Tulip heads */}
+            <ellipse cx="12" cy="16" rx="6" ry="9" fill="#E91E63"/>
+            <ellipse cx="2" cy="14" rx="5" ry="8" fill="#F06292"/>
+            <ellipse cx="20" cy="18" rx="5" ry="8" fill="#AD1457"/>
+            {/* Tulip shine */}
+            <ellipse cx="10" cy="12" rx="2" ry="4" fill="#F48FB1" opacity="0.6"/>
+          </svg>
+        </motion.div>
+      </motion.div>
+
+      {/* Floating petals when teddy appears */}
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={`petal-${i}`}
+          className="absolute text-xl select-none pointer-events-none"
+          style={{ left: `${15 + i * 10}%`, top: "110%" }}
+          initial={{ y: 0, opacity: 0, rotate: 0 }}
+          animate={{
+            y: [0, -300 - Math.random() * 200],
+            opacity: [0, 1, 1, 0],
+            rotate: [0, 180 + Math.random() * 180],
+            x: [0, (Math.random() - 0.5) * 80],
+          }}
+          transition={{
+            delay: 2.2 + i * 0.15,
+            duration: 2.5 + Math.random(),
+            ease: "easeOut",
+          }}
+        >
+          🌷
+        </motion.div>
+      ))}
+
+      {/* Are you ready text — fades out when teddy arrives */}
       <motion.div
         className="text-center z-10 px-6"
         initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
+        animate={{ opacity: [0, 1, 1, 0], scale: 1 }}
+        transition={{ delay: 0.3, duration: 0.6, times: [0, 0.2, 0.6, 1], duration: 4 }}
       >
         <motion.h1
           className="text-4xl md:text-6xl font-bold text-white mb-4"
@@ -273,12 +379,12 @@ function CloudIntro({ onReady }: { onReady: () => void }) {
         </p>
       </motion.div>
 
-      {/* Button appears after clouds split */}
+      {/* Button appears after teddy delivers */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2.8 }}
-        className="mt-10 z-10"
+        transition={{ delay: 3.8 }}
+        className="mt-10 z-30"
       >
         <Button
           size="lg"
@@ -708,4 +814,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-            }
+      }
