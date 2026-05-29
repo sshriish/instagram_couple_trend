@@ -54,7 +54,7 @@ const QUESTIONS = [
       top: "4%", left: "16%", width: "60%", height: "54%",
       shape: "50%",
       blendMode: "normal",
-      opacity: 0.65,
+      opacity: 0.45,
       filter: "brightness(1.05) contrast(1.0)",
     },
   },
@@ -69,7 +69,7 @@ const QUESTIONS = [
       top: "8%", left: "12%", width: "76%", height: "76%",
       shape: "50%",
       blendMode: "normal",
-      opacity: 0.55,
+      opacity: 0.40,
       filter: "brightness(1.1) contrast(1.0)",
     },
   },
@@ -115,7 +115,7 @@ const QUESTIONS = [
       top: "22%", left: "15%", width: "70%", height: "38%",
       shape: "4px",
       blendMode: "normal",
-      opacity: 0.85,
+      opacity: 0.90,
       filter: "brightness(1.05) contrast(1.05)",
     },
   },
@@ -127,7 +127,7 @@ const QUESTIONS = [
     image: "/images/steering.png",
     faceTarget: "sender",
     faceConfig: {
-      top: "28%", left: "33%", width: "34%", height: "32%",
+      top: "22%", left: "30%", width: "40%", height: "40%",
       shape: "50%",
       blendMode: "normal",
       opacity: 0.95,
@@ -142,10 +142,10 @@ const QUESTIONS = [
     image: "/images/sun.png",
     faceTarget: "receiver",
     faceConfig: {
-      top: "30%", left: "30%", width: "40%", height: "40%",
+      top: "22%", left: "22%", width: "56%", height: "56%",
       shape: "50%",
       blendMode: "normal",
-      opacity: 0.95,
+      opacity: 0.90,
       filter: "brightness(1.2) contrast(1.05)",
     },
   },
@@ -159,9 +159,9 @@ const QUESTIONS = [
     faceConfig: {
       top: "14%", left: "18%", width: "62%", height: "58%",
       shape: "50%",
-      blendMode: "normal",
-      opacity: 0.95,
-      filter: "brightness(1.0) contrast(1.05)",
+      blendMode: "screen",
+      opacity: 0.85,
+      filter: "brightness(1.3) contrast(1.1)",
       behindImage: true,
     },
   },
@@ -233,7 +233,7 @@ function CloudIntro({ onReady, senderNickname }: { onReady: () => void; senderNi
 
       <motion.div
         className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center z-20 select-none"
-        initial={{ y: 400, opacity: 0 }}
+        initial={{ y: 500, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 2.0, duration: 1.0, type: "spring", stiffness: 80, damping: 14 }}
       >
@@ -262,73 +262,117 @@ function CloudIntro({ onReady, senderNickname }: { onReady: () => void; senderNi
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 2.2 }}
           style={{ fontSize: "0px", lineHeight: 0 }}
         >
-          <svg width="260" height="320" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="36" cy="42" r="24" fill="#C68642"/>
-            <circle cx="36" cy="42" r="15" fill="#E8A96A"/>
-            <circle cx="144" cy="42" r="24" fill="#C68642"/>
-            <circle cx="144" cy="42" r="15" fill="#E8A96A"/>
-            <circle cx="90" cy="72" r="48" fill="#C68642"/>
-            <circle cx="90" cy="72" r="30" fill="#E8A96A"/>
-            <circle cx="76" cy="64" r="7" fill="#3B1F0A"/>
-            <circle cx="104" cy="64" r="7" fill="#3B1F0A"/>
-            <circle cx="78" cy="61" r="3" fill="white"/>
-            <circle cx="106" cy="61" r="3" fill="white"/>
-            <ellipse cx="90" cy="76" rx="6" ry="5" fill="#3B1F0A"/>
-            <path d="M80 86 Q90 96 100 86" stroke="#3B1F0A" strokeWidth="3" strokeLinecap="round" fill="none"/>
-            <ellipse cx="90" cy="162" rx="44" ry="50" fill="#C68642"/>
-            <ellipse cx="90" cy="162" rx="28" ry="32" fill="#E8A96A"/>
-            <path d="M46 138 Q16 122 10 100" stroke="#C68642" strokeWidth="22" strokeLinecap="round" fill="none"/>
-            <path d="M134 138 Q164 128 168 110" stroke="#C68642" strokeWidth="22" strokeLinecap="round" fill="none"/>
-            <ellipse cx="66" cy="208" rx="18" ry="13" fill="#C68642"/>
-            <ellipse cx="114" cy="208" rx="18" ry="13" fill="#C68642"/>
-            <path d="M-8 95 L30 60 L52 95 Z" fill="#E8F5E9" opacity="0.9"/>
-            <path d="M-8 95 L52 95 L42 115 L8 115 Z" fill="#C8E6C9"/>
-            <path d="M8 115 L42 115" stroke="#A5D6A7" strokeWidth="1.5"/>
-            <line x1="6" y1="95" x2="4" y2="20" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round"/>
-            <line x1="26" y1="90" x2="28" y2="14" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round"/>
-            <line x1="46" y1="93" x2="52" y2="18" stroke="#388E3C" strokeWidth="2.5" strokeLinecap="round"/>
-            <line x1="14" y1="92" x2="12" y2="10" stroke="#33691E" strokeWidth="3" strokeLinecap="round"/>
-            <line x1="34" y1="88" x2="36" y2="6" stroke="#33691E" strokeWidth="3" strokeLinecap="round"/>
-            <line x1="20" y1="95" x2="18" y2="16" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
-            <line x1="40" y1="94" x2="44" y2="12" stroke="#388E3C" strokeWidth="2.5" strokeLinecap="round"/>
-            <path d="M12 65 Q2 55 4 42 Q16 54 12 65Z" fill="#388E3C"/>
-            <path d="M10 62 Q22 52 24 40 Q12 50 10 62Z" fill="#43A047"/>
-            <path d="M32 60 Q22 48 26 36 Q38 50 32 60Z" fill="#2E7D32"/>
-            <path d="M30 58 Q42 46 40 32 Q28 46 30 58Z" fill="#388E3C"/>
-            <path d="M18 72 Q6 62 8 50 Q20 62 18 72Z" fill="#43A047"/>
-            <path d="M48 68 Q58 56 54 42 Q42 56 48 68Z" fill="#388E3C"/>
-            <ellipse cx="4" cy="14" rx="6" ry="10" fill="#AD1457"/>
-            <ellipse cx="28" cy="8" rx="7" ry="11" fill="#E91E63"/>
-            <ellipse cx="52" cy="12" rx="6" ry="10" fill="#880E4F"/>
-            <ellipse cx="12" cy="4" rx="7" ry="11" fill="#C2185B"/>
-            <ellipse cx="36" cy="-1" rx="8" ry="12" fill="#F06292" transform="translate(0,4)"/>
-            <ellipse cx="18" cy="9" rx="8" ry="12" fill="#E91E63"/>
-            <ellipse cx="44" cy="5" rx="7" ry="11" fill="#F48FB1"/>
-            <ellipse cx="-2" cy="18" rx="5" ry="8" fill="#D81B60"/>
-            <ellipse cx="58" cy="16" rx="5" ry="8" fill="#EC407A"/>
-            <ellipse cx="16" cy="5" rx="2.5" ry="5" fill="#F8BBD0" opacity="0.7"/>
-            <ellipse cx="4" cy="10" rx="2" ry="4" fill="#F8BBD0" opacity="0.6"/>
-            <ellipse cx="36" cy="3" rx="2.5" ry="5" fill="#F8BBD0" opacity="0.6"/>
-            <ellipse cx="26" cy="4" rx="2" ry="4" fill="#FCE4EC" opacity="0.7"/>
-            <ellipse cx="60" cy="20" rx="4" ry="6" fill="#F48FB1" opacity="0.9"/>
+          <svg width="340" height="420" viewBox="0 0 220 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* TEDDY BEAR */}
+            <circle cx="44" cy="52" r="28" fill="#C68642"/>
+            <circle cx="44" cy="52" r="18" fill="#E8A96A"/>
+            <circle cx="176" cy="52" r="28" fill="#C68642"/>
+            <circle cx="176" cy="52" r="18" fill="#E8A96A"/>
+            <circle cx="110" cy="88" r="58" fill="#C68642"/>
+            <circle cx="110" cy="88" r="38" fill="#E8A96A"/>
+            <circle cx="94" cy="78" r="9" fill="#3B1F0A"/>
+            <circle cx="126" cy="78" r="9" fill="#3B1F0A"/>
+            <circle cx="96" cy="75" r="3.5" fill="white"/>
+            <circle cx="128" cy="75" r="3.5" fill="white"/>
+            <ellipse cx="110" cy="94" rx="7" ry="6" fill="#3B1F0A"/>
+            <path d="M98 106 Q110 118 122 106" stroke="#3B1F0A" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+            <ellipse cx="110" cy="205" rx="54" ry="62" fill="#C68642"/>
+            <ellipse cx="110" cy="205" rx="34" ry="40" fill="#E8A96A"/>
+            <path d="M56 170 Q20 150 12 124" stroke="#C68642" strokeWidth="28" strokeLinecap="round" fill="none"/>
+            <path d="M164 170 Q200 158 206 138" stroke="#C68642" strokeWidth="28" strokeLinecap="round" fill="none"/>
+            <ellipse cx="82" cy="262" rx="22" ry="16" fill="#C68642"/>
+            <ellipse cx="138" cy="262" rx="22" ry="16" fill="#C68642"/>
+            {/* BOUQUET WRAPPING */}
+            <path d="M-30 130 L60 130 L80 160 L90 155 L50 85 Z" fill="#FCE4EC" opacity="0.9"/>
+            <path d="M-30 130 L60 130 L80 160 L90 155 L50 85 Z" fill="none" stroke="#F48FB1" strokeWidth="1.5"/>
+            <path d="M50 85 L55 100" stroke="#E91E63" strokeWidth="3" strokeLinecap="round"/>
+            {/* STEMS */}
+            <line x1="-10" y1="130" x2="-18" y2="30" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="2" y1="130" x2="-4" y2="18" stroke="#388E3C" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="14" y1="128" x2="10" y2="10" stroke="#33691E" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="26" y1="126" x2="24" y2="6" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="36" y1="124" x2="36" y2="4" stroke="#33691E" strokeWidth="4" strokeLinecap="round"/>
+            <line x1="46" y1="122" x2="48" y2="2" stroke="#388E3C" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="56" y1="120" x2="60" y2="-2" stroke="#2E7D32" strokeWidth="4" strokeLinecap="round"/>
+            <line x1="66" y1="118" x2="72" y2="-4" stroke="#33691E" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="76" y1="116" x2="84" y2="-6" stroke="#388E3C" strokeWidth="4" strokeLinecap="round"/>
+            <line x1="86" y1="115" x2="96" y2="-5" stroke="#2E7D32" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="96" y1="115" x2="108" y2="-3" stroke="#33691E" strokeWidth="4" strokeLinecap="round"/>
+            <line x1="106" y1="116" x2="120" y2="0" stroke="#388E3C" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="116" y1="117" x2="130" y2="4" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="126" y1="120" x2="142" y2="10" stroke="#33691E" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="134" y1="122" x2="152" y2="18" stroke="#388E3C" strokeWidth="3" strokeLinecap="round"/>
+            {/* LEAVES */}
+            <path d="M10 80 Q-4 66 -2 50 Q12 64 10 80Z" fill="#388E3C"/>
+            <path d="M8 78 Q22 62 20 46 Q6 60 8 78Z" fill="#43A047"/>
+            <path d="M32 72 Q18 56 22 40 Q36 56 32 72Z" fill="#2E7D32"/>
+            <path d="M50 65 Q64 48 60 32 Q46 50 50 65Z" fill="#388E3C"/>
+            <path d="M70 58 Q84 40 80 24 Q64 42 70 58Z" fill="#43A047"/>
+            <path d="M90 52 Q104 34 98 18 Q82 36 90 52Z" fill="#2E7D32"/>
+            <path d="M110 50 Q124 32 120 16 Q104 34 110 50Z" fill="#388E3C"/>
+            <path d="M126 54 Q140 38 136 22 Q120 38 126 54Z" fill="#43A047"/>
+            <path d="M18 90 Q4 76 6 60 Q20 76 18 90Z" fill="#388E3C" opacity="0.8"/>
+            <path d="M42 82 Q28 68 32 52 Q46 68 42 82Z" fill="#2E7D32" opacity="0.8"/>
+            {/* TULIPS - back row */}
+            <ellipse cx="-14" cy="22" rx="5" ry="8" fill="#880E4F" opacity="0.85"/>
+            <ellipse cx="0" cy="12" rx="6" ry="9" fill="#AD1457" opacity="0.85"/>
+            <ellipse cx="14" cy="4" rx="6" ry="10" fill="#C2185B" opacity="0.85"/>
+            <ellipse cx="28" cy="-2" rx="7" ry="10" fill="#E91E63" opacity="0.85"/>
+            <ellipse cx="42" cy="-4" rx="7" ry="11" fill="#D81B60" opacity="0.85"/>
+            <ellipse cx="56" cy="-5" rx="7" ry="11" fill="#EC407A" opacity="0.85"/>
+            <ellipse cx="70" cy="-4" rx="7" ry="10" fill="#F06292" opacity="0.85"/>
+            <ellipse cx="84" cy="-3" rx="7" ry="10" fill="#FF4081" opacity="0.85"/>
+            <ellipse cx="98" cy="-1" rx="7" ry="10" fill="#E91E63" opacity="0.85"/>
+            <ellipse cx="112" cy="2" rx="6" ry="9" fill="#C2185B" opacity="0.85"/>
+            <ellipse cx="126" cy="6" rx="6" ry="9" fill="#AD1457" opacity="0.85"/>
+            <ellipse cx="138" cy="12" rx="5" ry="8" fill="#880E4F" opacity="0.85"/>
+            <ellipse cx="148" cy="20" rx="5" ry="8" fill="#D81B60" opacity="0.85"/>
+            {/* TULIPS - mid row */}
+            <ellipse cx="-6" cy="28" rx="6" ry="10" fill="#E91E63"/>
+            <ellipse cx="10" cy="14" rx="7" ry="11" fill="#F06292"/>
+            <ellipse cx="26" cy="4" rx="7" ry="12" fill="#C2185B"/>
+            <ellipse cx="42" cy="-2" rx="8" ry="13" fill="#D81B60"/>
+            <ellipse cx="60" cy="-4" rx="8" ry="13" fill="#FF4081"/>
+            <ellipse cx="78" cy="-5" rx="8" ry="13" fill="#E91E63"/>
+            <ellipse cx="96" cy="-4" rx="8" ry="13" fill="#F48FB1"/>
+            <ellipse cx="114" cy="-2" rx="7" ry="12" fill="#EC407A"/>
+            <ellipse cx="130" cy="4" rx="7" ry="12" fill="#AD1457"/>
+            <ellipse cx="144" cy="14" rx="6" ry="11" fill="#C2185B"/>
+            {/* TULIPS - front row */}
+            <ellipse cx="4" cy="32" rx="7" ry="12" fill="#F48FB1"/>
+            <ellipse cx="22" cy="16" rx="8" ry="13" fill="#E91E63"/>
+            <ellipse cx="40" cy="4" rx="9" ry="14" fill="#D81B60"/>
+            <ellipse cx="58" cy="-2" rx="9" ry="15" fill="#C2185B"/>
+            <ellipse cx="78" cy="-5" rx="9" ry="15" fill="#FF4081"/>
+            <ellipse cx="98" cy="-4" rx="9" ry="14" fill="#E91E63"/>
+            <ellipse cx="116" cy="0" rx="8" ry="14" fill="#EC407A"/>
+            <ellipse cx="132" cy="10" rx="8" ry="13" fill="#F06292"/>
+            <ellipse cx="146" cy="22" rx="7" ry="12" fill="#AD1457"/>
+            {/* HIGHLIGHTS */}
+            <ellipse cx="40" cy="0" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
+            <ellipse cx="58" cy="-6" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
+            <ellipse cx="78" cy="-9" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
+            <ellipse cx="98" cy="-8" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
+            <ellipse cx="22" cy="12" rx="2.5" ry="5" fill="#FCE4EC" opacity="0.5"/>
+            <ellipse cx="116" cy="-4" rx="2.5" ry="5" fill="#FCE4EC" opacity="0.5"/>
           </svg>
         </motion.div>
       </motion.div>
 
-      {[...Array(14)].map((_, i) => (
+      {[...Array(22)].map((_, i) => (
         <motion.div
           key={`petal-${i}`}
           className="absolute text-3xl select-none pointer-events-none"
-          style={{ left: `${8 + i * 6.5}%`, top: "110%" }}
+          style={{ left: `${3 + i * 4.5}%`, top: "110%" }}
           initial={{ y: 0, opacity: 0, rotate: 0 }}
           animate={{
-            y: [0, -300 - Math.random() * 200],
+            y: [0, -350 - Math.random() * 200],
             opacity: [0, 1, 1, 0],
             rotate: [0, 180 + Math.random() * 180],
-            x: [0, (Math.random() - 0.5) * 80],
+            x: [0, (Math.random() - 0.5) * 100],
           }}
           transition={{
-            delay: 2.2 + i * 0.12,
+            delay: 2.2 + i * 0.1,
             duration: 2.5 + Math.random(),
             ease: "easeOut",
           }}
@@ -373,17 +417,17 @@ function CloudIntro({ onReady, senderNickname }: { onReady: () => void; senderNi
   );
 }
 
-const SCENE_FACE_CONFIG: Record<string, { cx: number; cy: number; r: number; imgW: number; imgH: number; behindImage?: boolean; shape?: "circle" | "rect"; rectW?: number; rectH?: number; rotate?: number }> = {
+const SCENE_FACE_CONFIG: Record<string, { cx: number; cy: number; r: number; imgW: number; imgH: number; behindImage?: boolean; shape?: "circle" | "rect"; rectW?: number; rectH?: number; rotate?: number; faceOpacity?: number }> = {
   sofa:      { cx: 274,  cy: 244,  r: 155, imgW: 1372, imgH: 872 },
   astronaut: { cx: 1027, cy: 304,  r: 88,  imgW: 1334, imgH: 896 },
-  clock:     { cx: 415,  cy: 335,  r: 220, imgW: 831,  imgH: 1109 },
-  earth:     { cx: 640,  cy: 476,  r: 280, imgW: 1278, imgH: 952 },
+  clock:     { cx: 415,  cy: 335,  r: 220, imgW: 831,  imgH: 1109, faceOpacity: 0.40 },
+  earth:     { cx: 640,  cy: 476,  r: 280, imgW: 1278, imgH: 952,  faceOpacity: 0.38 },
   bandaid:   { cx: 530,  cy: 480,  r: 0,   imgW: 1112, imgH: 1049, shape: "rect", rectW: 320, rectH: 180, rotate: -40 },
   ruler:     { cx: 220,  cy: 310,  r: 130, imgW: 1102, imgH: 868 },
-  kitkat:    { cx: 460,  cy: 210,  r: 0,   imgW: 1028, imgH: 763, shape: "rect", rectW: 580, rectH: 200, rotate: 0 },
-  steering:  { cx: 640,  cy: 420,  r: 170, imgW: 1316, imgH: 908 },
-  sun:       { cx: 350,  cy: 320,  r: 130, imgW: 698,  imgH: 680 },
-  ghost:     { cx: 570,  cy: 430,  r: 220, imgW: 1232, imgH: 960, behindImage: true },
+  kitkat:    { cx: 460,  cy: 210,  r: 0,   imgW: 1028, imgH: 763,  shape: "rect", rectW: 560, rectH: 195, rotate: 0 },
+  steering:  { cx: 640,  cy: 380,  r: 155, imgW: 1316, imgH: 908,  behindImage: true },
+  sun:       { cx: 349,  cy: 340,  r: 160, imgW: 698,  imgH: 680 },
+  ghost:     { cx: 570,  cy: 420,  r: 210, imgW: 1232, imgH: 960,  behindImage: true, faceOpacity: 0.80 },
 };
 
 async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: string): Promise<string> {
@@ -414,6 +458,7 @@ async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: stri
       try {
         const faceCX = config.cx * scale - offsetX;
         const faceCY = config.cy * scale - offsetY;
+        const faceAlpha = config.faceOpacity ?? 0.92;
 
         if (config.behindImage) {
           ctx.save();
@@ -424,9 +469,10 @@ async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: stri
           const fScale = Math.max((faceR * 2) / faceImg.naturalWidth, (faceR * 2) / faceImg.naturalHeight);
           const fdw = faceImg.naturalWidth * fScale;
           const fdh = faceImg.naturalHeight * fScale;
+          ctx.globalAlpha = faceAlpha;
           ctx.drawImage(faceImg, faceCX - fdw / 2, faceCY - fdh / 2, fdw, fdh);
           ctx.restore();
-          ctx.globalAlpha = 0.9;
+          ctx.globalAlpha = 0.92;
           ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
           ctx.globalAlpha = 1;
         } else if (config.shape === "rect") {
@@ -442,6 +488,7 @@ async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: stri
           const fScale = Math.max(rw / faceImg.naturalWidth, rh / faceImg.naturalHeight);
           const fdw = faceImg.naturalWidth * fScale;
           const fdh = faceImg.naturalHeight * fScale;
+          ctx.globalAlpha = faceAlpha;
           ctx.drawImage(faceImg, -fdw / 2, -fdh / 2, fdw, fdh);
           ctx.restore();
         } else {
@@ -454,8 +501,10 @@ async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: stri
           const fScale = Math.max((faceR * 2) / faceImg.naturalWidth, (faceR * 2) / faceImg.naturalHeight);
           const fdw = faceImg.naturalWidth * fScale;
           const fdh = faceImg.naturalHeight * fScale;
+          ctx.globalAlpha = faceAlpha;
           ctx.drawImage(faceImg, faceCX - fdw / 2, faceCY - fdh / 2, fdw, fdh);
           ctx.restore();
+          ctx.globalAlpha = 1;
           ctx.beginPath();
           ctx.arc(faceCX, faceCY, faceR + 2, 0, Math.PI * 2);
           ctx.strokeStyle = "rgba(255,255,255,0.3)";
@@ -463,6 +512,7 @@ async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: stri
           ctx.stroke();
         }
 
+        ctx.globalAlpha = 1;
         const result = canvas.toDataURL("image/jpeg", 0.92);
         resolve(result);
       } catch {
@@ -557,9 +607,10 @@ function SlideCard({
       .catch(() => setLoading(false));
   }, [question.id, faceUrl]);
 
-  const revealText = senderNickname
-    ? question.revealText.replace("Space....I see :)", `Space....I see :) — ${senderNickname}`)
-    : question.revealText;
+  let revealText = question.revealText;
+  if (senderNickname) {
+    revealText = revealText.replace("Space....I see :)", `Space....I see :) — ${senderNickname}`);
+  }
 
   const handleSaveSlide = () => {
     if (!compositeSrc) return;
@@ -678,11 +729,25 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
     if (audio) { audio.pause(); audio.currentTime = 0; (window as any).__bgAudio = null; }
   };
 
+  const notifySender = async () => {
+    try {
+      const token = (userData as any).token || userData.shareLink?.split("/share/")[1];
+      if (token) {
+        await supabase.from("meme_sessions").update({ receiver_finished: true }).eq("token", token);
+      }
+    } catch (e) { console.error(e); }
+  };
+
   const handleExit = () => { stopAudio(); onNavigate("final"); };
 
   const handleNext = () => {
-    if (currentIndex === QUESTIONS.length - 1) { setPhase("exit"); }
-    else { setCurrentIndex((i) => i + 1); if (navigator.vibrate) navigator.vibrate(50); }
+    if (currentIndex === QUESTIONS.length - 1) {
+      notifySender();
+      setPhase("exit");
+    } else {
+      setCurrentIndex((i) => i + 1);
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
   };
 
   const handlePrev = () => {
@@ -731,7 +796,7 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
                 receiverUrl={receiverUrl}
                 onNext={handleNext}
                 onPrev={handlePrev}
-                onExit={() => { stopAudio(); setPhase("exit"); }}
+                onExit={() => { stopAudio(); notifySender(); setPhase("exit"); }}
                 index={currentIndex}
                 total={QUESTIONS.length}
                 senderNickname={senderNickname}
@@ -786,4 +851,4 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
       </AnimatePresence>
     </div>
   );
-  }
+      }
