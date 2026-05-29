@@ -6,6 +6,8 @@ import { Camera, X, ArrowLeft, Unlock, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { AppScreen, UserData } from "@/app/page";
 import ParticleField from "@/components/ui/particle-field";
+import { supabase } from "@/lib/supabase";
+import { useParams } from "next/navigation";
 
 interface PartnerUploadScreenProps {
   onNavigate: (screen: AppScreen) => void;
@@ -16,6 +18,7 @@ export default function PartnerUploadScreen({
   onNavigate,
   onUpdateUserData,
 }: PartnerUploadScreenProps) {
+  const { token } = useParams() as { token: string };
   const [selfie, setSelfie] = useState<string | null>(null);
   const [isUnlocking, setIsUnlocking] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -57,17 +60,40 @@ export default function PartnerUploadScreen({
 
   const handleUnlock = async () => {
     if (!selfie) return;
-
     setIsUnlocking(true);
 
-    // Simulate face detection
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Convert base64 to blob
+      const res = await fetch(selfie);
+      const blob = await res.blob();
+      const fileName = `partner-${token}-${Date.now()}.jpg`;
 
-    onUpdateUserData({ partnerSelfieUrl: selfie });
+      // Upload to Supabase storage
+      const { error: uploadError } = await supabase.storage
+        .from("selfies")
+        .upload(fileName, blob, { contentType: "image/jpeg" });
 
-    // Dramatic transition
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from("selfies")
+        .getPublicUrl(fileName);
+
+      const publicUrl = urlData.publicUrl;
+
+      // Save to database
+      await supabase
+        .from("meme_sessions")
+        .update({ partner_selfie_url: publicUrl })
+        .eq("token", token);
+
+      onUpdateUserData({ partnerSelfieUrl: publicUrl });
+    } catch (err) {
+      console.error("Upload failed:", err);
+    }
+
     await new Promise((resolve) => setTimeout(resolve, 500));
-
     onNavigate("meme-reveal");
   };
 
@@ -183,8 +209,8 @@ export default function PartnerUploadScreen({
                   relative flex flex-col items-center justify-center
                   w-56 h-56 mx-auto rounded-full cursor-pointer
                   glass border-2 border-dashed transition-all duration-300
-                  ${isDragging 
-                    ? "border-primary bg-primary/10 scale-105" 
+                  ${isDragging
+                    ? "border-primary bg-primary/10 scale-105"
                     : "border-border/50 hover:border-primary/50 hover:bg-muted/30"
                   }
                 `}
@@ -224,7 +250,7 @@ export default function PartnerUploadScreen({
                 >
                   <X className="w-5 h-5" />
                 </button>
-                
+
                 {/* Face detected indicator */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
