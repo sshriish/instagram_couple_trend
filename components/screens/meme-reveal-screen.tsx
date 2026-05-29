@@ -13,11 +13,11 @@ interface MemeRevealScreenProps {
 }
 
 // faceConfig controls how the face is composited onto each scene.
-// shape: "circle" | "ellipse" — clipping shape
-// blendMode: CSS mix-blend-mode value
-// opacity: overlay opacity (0–1)
-// filter: CSS filter string applied to face image
-// top/left/width/height: positioning as % of the card container
+// shape: CSS border-radius string (e.g. "50%" = circle, "12px" = rounded rect, "50% / 40%" = ellipse)
+// blendMode: "normal" for fully visible, or a CSS mix-blend-mode for special cases
+// opacity: 1 = fully visible, lower only where intentional
+// filter: minimal — just brightness/contrast tweaks, no heavy saturation removal
+// top/left/width/height: % positioning within the square card
 const QUESTIONS = [
   {
     id: 1,
@@ -26,77 +26,78 @@ const QUESTIONS = [
     emoji: "🪑",
     image: "/images/sofa.png",
     faceTarget: "sender",
-    // Face goes on the left cushion of the sofa
+    // Empty left recliner cushion — face sits cleanly on the seat
     faceConfig: {
-      top: "28%", left: "22%", width: "36%", height: "36%",
-      shape: "ellipse",
-      blendMode: "multiply",
-      opacity: 0.82,
-      filter: "contrast(1.05) saturate(0.7) brightness(0.9)",
+      top: "20%", left: "5%", width: "38%", height: "38%",
+      shape: "50%",
+      blendMode: "normal",
+      opacity: 0.95,
+      filter: "brightness(0.95) contrast(1.05)",
     },
   },
   {
     id: 2,
     question: "You need space?",
-    revealText: "Think again",
+    revealText: "Space....I see :)",
     emoji: "🚀",
     image: "/images/astronaut.png",
     faceTarget: "sender",
-    // Face fits inside the helmet visor (oval, centered on helmet)
+    // Helmet visor — dark oval in upper-right of image
     faceConfig: {
-      top: "14%", left: "46%", width: "30%", height: "32%",
-      shape: "ellipse",
-      blendMode: "screen",
-      opacity: 0.88,
-      filter: "contrast(1.1) saturate(0.85) brightness(1.05)",
+      top: "12%", left: "52%", width: "26%", height: "22%",
+      shape: "50% / 45%",
+      blendMode: "normal",
+      opacity: 0.92,
+      filter: "brightness(1.0) contrast(1.1)",
     },
   },
   {
     id: 3,
     question: "You need time?",
-    revealText: "Take your time.",
+    revealText: "take your time.",
     emoji: "⏰",
     image: "/images/clock.png",
     faceTarget: "sender",
-    // Face fills the clock dial circle
+    // Clock face dial — large cream circle occupying top 55% of image
     faceConfig: {
-      top: "8%", left: "22%", width: "56%", height: "56%",
-      shape: "circle",
-      blendMode: "luminosity",
-      opacity: 0.72,
-      filter: "contrast(1.1) saturate(0.6) brightness(1.0)",
+      top: "4%", left: "16%", width: "60%", height: "54%",
+      shape: "50%",
+      blendMode: "normal",
+      opacity: 0.88,
+      filter: "brightness(1.05) contrast(1.0)",
     },
   },
   {
     id: 4,
     question: "You are my world?",
-    revealText: "you're literally my Everything!!",
+    revealText: "you're literally my world !!!",
     emoji: "🌍",
     image: "/images/earth.png",
     faceTarget: "receiver",
-    // Face softly overlaid across the whole earth sphere
+    // Full earth sphere — face overlaid as large transparent circle on globe center
     faceConfig: {
-      top: "5%", left: "10%", width: "80%", height: "80%",
-      shape: "circle",
-      blendMode: "soft-light",
-      opacity: 0.60,
-      filter: "contrast(0.9) saturate(0.5) brightness(1.1)",
+      top: "8%", left: "12%", width: "76%", height: "76%",
+      shape: "50%",
+      blendMode: "normal",
+      opacity: 0.45,
+      filter: "brightness(1.1) contrast(1.0)",
     },
   },
   {
     id: 5,
     question: "You need to heal?",
-    revealText: "Take your time princess and I am sorry",
+    revealText: "take your time princess and i am sorry",
     emoji: "🩹",
     image: "/images/bandaid.png",
     faceTarget: "sender",
-    // Face on the center gauze pad of the bandaid (rotated ~-40deg bandaid)
+    // Bandaid is diagonal — gauze pad is a rotated square in the center
     faceConfig: {
-      top: "30%", left: "30%", width: "38%", height: "38%",
-      shape: "circle",
-      blendMode: "multiply",
-      opacity: 0.80,
-      filter: "contrast(1.05) saturate(0.75) brightness(0.95)",
+      top: "28%", left: "28%", width: "42%", height: "42%",
+      shape: "12px",
+      blendMode: "normal",
+      opacity: 0.92,
+      filter: "brightness(1.0) contrast(1.05)",
+      rotate: "-40deg",
     },
   },
   {
@@ -106,45 +107,45 @@ const QUESTIONS = [
     emoji: "📏",
     image: "/images/ruler.png",
     faceTarget: "sender",
-    // Face blended on the ruler surface, center-left
+    // Ruler goes diagonal — face floats on the top flat face, left side
     faceConfig: {
-      top: "28%", left: "20%", width: "34%", height: "34%",
-      shape: "circle",
-      blendMode: "multiply",
-      opacity: 0.75,
-      filter: "contrast(1.0) saturate(0.5) brightness(0.9)",
+      top: "22%", left: "12%", width: "34%", height: "34%",
+      shape: "50%",
+      blendMode: "normal",
+      opacity: 0.95,
+      filter: "brightness(1.0) contrast(1.05)",
     },
   },
   {
     id: 7,
     question: "You need a break?",
-    revealText: "pch fine :(",
+    revealText: "fine :(",
     emoji: "🍫",
     image: "/images/kitkat.png",
     faceTarget: "sender",
-    // Face on the KitKat bar wrapper center
+    // KitKat bars stacked — face on top of the chocolate, center
     faceConfig: {
-      top: "20%", left: "32%", width: "36%", height: "36%",
-      shape: "circle",
-      blendMode: "multiply",
-      opacity: 0.78,
-      filter: "contrast(1.05) saturate(0.65) brightness(0.85)",
+      top: "10%", left: "28%", width: "40%", height: "40%",
+      shape: "50%",
+      blendMode: "normal",
+      opacity: 0.95,
+      filter: "brightness(1.05) contrast(1.05)",
     },
   },
   {
     id: 8,
     question: "I drive you crazy?",
-    revealText: "congrats you won, you saw something no-one ever did",
+    revealText: "congrats you won you saw something noone ever did",
     emoji: "🚗",
     image: "/images/steering.png",
     faceTarget: "sender",
-    // Face inside the center hub/logo area of the steering wheel
+    // Steering wheel center hub — circular, sits at roughly 35-65% horizontal, 35-68% vertical
     faceConfig: {
-      top: "26%", left: "28%", width: "44%", height: "44%",
-      shape: "circle",
-      blendMode: "luminosity",
-      opacity: 0.80,
-      filter: "contrast(1.05) saturate(0.7) brightness(1.0)",
+      top: "34%", left: "32%", width: "36%", height: "34%",
+      shape: "50%",
+      blendMode: "normal",
+      opacity: 0.95,
+      filter: "brightness(1.0) contrast(1.05)",
     },
   },
   {
@@ -154,29 +155,30 @@ const QUESTIONS = [
     emoji: "☀️",
     image: "/images/sun.png",
     faceTarget: "receiver",
-    // Face inside the circular sun disc at center
+    // Inner golden sun circle — center of the artwork
     faceConfig: {
-      top: "22%", left: "28%", width: "44%", height: "44%",
-      shape: "circle",
-      blendMode: "soft-light",
-      opacity: 0.85,
-      filter: "contrast(1.0) saturate(0.7) brightness(1.1)",
+      top: "34%", left: "30%", width: "38%", height: "35%",
+      shape: "50%",
+      blendMode: "normal",
+      opacity: 0.92,
+      filter: "brightness(1.1) contrast(1.0)",
     },
   },
   {
     id: 10,
     question: "You want to ghost me?",
-    revealText: "Fine ghost me but from today onwards even death can't do us apart",
+    revealText: "fine ghost me but from today onwards even death can't do us apart",
     emoji: "👻",
     image: "/images/ghost.png",
     faceTarget: "sender",
-    // Face where the ghost "head" is (upper body of the ghost)
+    // Ghost body center — face visible on the white ghost body, ghost drawn on top via z layering
     faceConfig: {
-      top: "10%", left: "28%", width: "44%", height: "44%",
-      shape: "circle",
-      blendMode: "luminosity",
-      opacity: 0.70,
-      filter: "contrast(1.0) saturate(0.0) brightness(1.15)",
+      top: "28%", left: "26%", width: "48%", height: "44%",
+      shape: "50%",
+      blendMode: "normal",
+      opacity: 0.90,
+      filter: "brightness(1.05) contrast(1.0)",
+      behindImage: true,
     },
   },
 ];
@@ -327,15 +329,8 @@ function SlideCard({
         className="relative w-full rounded-3xl overflow-hidden shadow-2xl border-2 border-white/10"
         style={{ aspectRatio: "1" }}
       >
-        {/* Base image */}
-        <img
-          src={question.image}
-          alt={question.question}
-          className="w-full h-full object-cover"
-        />
-
-        {/* Face blended on top — per-slide precise config */}
-        {faceUrl && (
+        {/* Base image — rendered on top for ghost so ghost lines overlay the face */}
+        {question.faceConfig.behindImage && faceUrl && (
           <div
             className="absolute overflow-hidden"
             style={{
@@ -343,9 +338,43 @@ function SlideCard({
               left: question.faceConfig.left,
               width: question.faceConfig.width,
               height: question.faceConfig.height,
-              borderRadius: question.faceConfig.shape === "circle" ? "50%" : "50% / 45%",
+              borderRadius: question.faceConfig.shape,
+              opacity: question.faceConfig.opacity,
+              transform: question.faceConfig.rotate ? `rotate(${question.faceConfig.rotate})` : undefined,
+            }}
+          >
+            <img
+              src={faceUrl}
+              alt="face"
+              className="w-full h-full object-cover"
+              style={{ filter: question.faceConfig.filter }}
+            />
+          </div>
+        )}
+
+        {/* Base scene image */}
+        <img
+          src={question.image}
+          alt={question.question}
+          className="w-full h-full object-cover"
+          style={{ position: "relative", zIndex: question.faceConfig.behindImage ? 2 : 0 }}
+        />
+
+        {/* Face on top (all slides except ghost) */}
+        {!question.faceConfig.behindImage && faceUrl && (
+          <div
+            className="absolute overflow-hidden"
+            style={{
+              top: question.faceConfig.top,
+              left: question.faceConfig.left,
+              width: question.faceConfig.width,
+              height: question.faceConfig.height,
+              borderRadius: question.faceConfig.shape,
               mixBlendMode: question.faceConfig.blendMode as any,
               opacity: question.faceConfig.opacity,
+              transform: question.faceConfig.rotate ? `rotate(${question.faceConfig.rotate})` : undefined,
+              boxShadow: "0 0 0 3px rgba(255,255,255,0.15), 0 4px 20px rgba(0,0,0,0.4)",
+              zIndex: 1,
             }}
           >
             <img
@@ -573,4 +602,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-            }
+      }
