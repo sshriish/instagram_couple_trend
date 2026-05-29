@@ -26,9 +26,9 @@ const QUESTIONS = [
     emoji: "🪑",
     image: "/images/sofa.png",
     faceTarget: "sender",
-    // Empty left recliner cushion — face sits on the seat area
+    // Empty left recliner — face on the seat, below the backrest
     faceConfig: {
-      top: "38%", left: "5%", width: "38%", height: "38%",
+      top: "48%", left: "8%", width: "36%", height: "36%",
       shape: "50%",
       blendMode: "normal",
       opacity: 0.95,
@@ -42,9 +42,9 @@ const QUESTIONS = [
     emoji: "🚀",
     image: "/images/astronaut.png",
     faceTarget: "sender",
-    // Helmet visor — the dark reflective oval on the helmet
+    // Helmet visor — dark reflective oval, upper right of the astronaut
     faceConfig: {
-      top: "15%", left: "55%", width: "24%", height: "20%",
+      top: "8%", left: "58%", width: "22%", height: "20%",
       shape: "50% / 48%",
       blendMode: "normal",
       opacity: 0.95,
@@ -155,13 +155,13 @@ const QUESTIONS = [
     emoji: "☀️",
     image: "/images/sun.png",
     faceTarget: "receiver",
-    // Inner golden sun circle — center lower area of the artwork
+    // Inner golden sun circle — sits lower-center in the artwork
     faceConfig: {
-      top: "38%", left: "28%", width: "40%", height: "38%",
+      top: "42%", left: "30%", width: "38%", height: "36%",
       shape: "50%",
       blendMode: "normal",
       opacity: 0.95,
-      filter: "brightness(1.05) contrast(1.0)",
+      filter: "brightness(1.2) contrast(1.05)",
     },
   },
   {
@@ -605,4 +605,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-          }
+                }
