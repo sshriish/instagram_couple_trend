@@ -22,7 +22,7 @@ const QUESTIONS = [
   {
     id: 1,
     question: "You can't stand me?",
-    revealText: "Okay… you ARE the chair now 🪑",
+    revealText: "Okay.... there you go sit on me 🫦",
     emoji: "🪑",
     image: "/images/sofa.png",
     faceTarget: "sender",
@@ -38,7 +38,7 @@ const QUESTIONS = [
   {
     id: 2,
     question: "You need space?",
-    revealText: "Way ahead of you, astronaut 🚀",
+    revealText: "Think again",
     emoji: "🚀",
     image: "/images/astronaut.png",
     faceTarget: "sender",
@@ -54,7 +54,7 @@ const QUESTIONS = [
   {
     id: 3,
     question: "You need time?",
-    revealText: "Okay, you ARE time now ⏰",
+    revealText: "Take your time.",
     emoji: "⏰",
     image: "/images/clock.png",
     faceTarget: "sender",
@@ -70,7 +70,7 @@ const QUESTIONS = [
   {
     id: 4,
     question: "You are my world?",
-    revealText: "Literally. The whole planet 🌍",
+    revealText: "you're literally my Everything!!",
     emoji: "🌍",
     image: "/images/earth.png",
     faceTarget: "receiver",
@@ -86,7 +86,7 @@ const QUESTIONS = [
   {
     id: 5,
     question: "You need to heal?",
-    revealText: "Here's your diagnosis 🩹",
+    revealText: "Take your time princess and I am sorry",
     emoji: "🩹",
     image: "/images/bandaid.png",
     faceTarget: "sender",
@@ -118,7 +118,7 @@ const QUESTIONS = [
   {
     id: 7,
     question: "You need a break?",
-    revealText: "Have a break… have a you 🍫",
+    revealText: "pch fine :(",
     emoji: "🍫",
     image: "/images/kitkat.png",
     faceTarget: "sender",
@@ -134,7 +134,7 @@ const QUESTIONS = [
   {
     id: 8,
     question: "I drive you crazy?",
-    revealText: "Congrats, you're the steering wheel 🚗",
+    revealText: "congrats you won, you saw something no-one ever did",
     emoji: "🚗",
     image: "/images/steering.png",
     faceTarget: "sender",
@@ -150,7 +150,7 @@ const QUESTIONS = [
   {
     id: 9,
     question: "You're my sunshine?",
-    revealText: "You literally light up my world ☀️",
+    revealText: "You literally light up my world",
     emoji: "☀️",
     image: "/images/sun.png",
     faceTarget: "receiver",
@@ -166,7 +166,7 @@ const QUESTIONS = [
   {
     id: 10,
     question: "You want to ghost me?",
-    revealText: "Too late. You already are one 👻",
+    revealText: "Fine ghost me but from today onwards even death can't do us apart",
     emoji: "👻",
     image: "/images/ghost.png",
     faceTarget: "sender",
@@ -573,4 +573,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-    }
+            }
