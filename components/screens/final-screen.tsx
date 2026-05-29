@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles, Share2, MessageCircle, RefreshCw, Heart, Trophy, Lock,
 } from "lucide-react";
@@ -26,6 +26,7 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
     userData.partnerSelfieUrl
   );
   const [checking, setChecking] = useState(false);
+  const [seenToast, setSeenToast] = useState(false);
 
   useEffect(() => {
     if (!userData.token) return;
@@ -34,13 +35,14 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
       setChecking(true);
       const { data } = await supabase
         .from("meme_sessions")
-        .select("private_message, partner_selfie_url")
+        .select("private_message, partner_selfie_url, receiver_finished")
         .eq("token", userData.token)
         .single();
 
       if (data) {
         if (data.private_message) setPrivateMessage(data.private_message);
         if (data.partner_selfie_url) setPartnerSelfie(data.partner_selfie_url);
+        if (data.receiver_finished && !seenToast) setSeenToast(true);
       }
       setChecking(false);
     };
@@ -48,7 +50,7 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
     fetchUpdates();
     const interval = setInterval(fetchUpdates, 5000);
     return () => clearInterval(interval);
-  }, [userData.token]);
+  }, [userData.token, seenToast]);
 
   return (
     <motion.div
@@ -61,6 +63,22 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
       <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-secondary/20" />
       <ParticleField />
       <ConfettiExplosion />
+
+      {/* "They've seen it" toast */}
+      <AnimatePresence>
+        {seenToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -60, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -60 }}
+            transition={{ type: "spring", stiffness: 300, damping: 24 }}
+            className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-2xl shadow-2xl"
+          >
+            <span className="text-xl">👀</span>
+            <span className="font-bold text-base">They've seen it!</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="relative z-10 w-full max-w-md mx-auto flex flex-col items-center text-center">
         {/* Trophy */}
