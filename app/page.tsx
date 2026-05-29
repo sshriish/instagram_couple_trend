@@ -9,11 +9,13 @@ import PartnerLandingScreen from "@/components/screens/partner-landing-screen";
 import PartnerUploadScreen from "@/components/screens/partner-upload-screen";
 import MemeRevealScreen from "@/components/screens/meme-reveal-screen";
 import FinalScreen from "@/components/screens/final-screen";
+import WaitingScreen from "@/components/screens/waiting-screen";
 
 export type AppScreen =
   | "landing"
   | "upload"
   | "link-generated"
+  | "waiting"
   | "partner-landing"
   | "partner-upload"
   | "meme-reveal"
@@ -23,17 +25,20 @@ export interface UserData {
   selfieUrl: string | null;
   nickname: string;
   shareLink: string;
+  token: string;
   partnerSelfieUrl: string | null;
+  privateMessage: string;
 }
 
 export default function Home() {
-  // Change initial screen to test different flows - set back to "landing" for production
   const [currentScreen, setCurrentScreen] = useState<AppScreen>("landing");
   const [userData, setUserData] = useState<UserData>({
     selfieUrl: null,
     nickname: "",
     shareLink: "",
+    token: "",
     partnerSelfieUrl: null,
+    privateMessage: "",
   });
 
   const handleNavigate = (screen: AppScreen) => {
@@ -61,6 +66,14 @@ export default function Home() {
           <LinkGeneratedScreen
             key="link-generated"
             userData={userData}
+            onNavigate={handleNavigate}
+          />
+        )}
+        {currentScreen === "waiting" && (
+          <WaitingScreen
+            key="waiting"
+            userData={userData}
+            onUpdateUserData={handleUpdateUserData}
             onNavigate={handleNavigate}
           />
         )}
