@@ -115,7 +115,6 @@ export default function UploadSelfieScreen({
     ctx.drawImage(video, 0, 0);
     const dataUrl = canvas.toDataURL("image/jpeg");
 
-    // Convert dataUrl to File for upload
     canvas.toBlob((blob) => {
       if (blob) {
         const file = new File([blob], "selfie.jpg", { type: "image/jpeg" });
@@ -199,7 +198,6 @@ export default function UploadSelfieScreen({
       <ParticleField />
       <canvas ref={canvasRef} className="hidden" />
 
-      {/* Hidden file input */}
       <input
         ref={fileInputRef}
         type="file"
@@ -255,10 +253,10 @@ export default function UploadSelfieScreen({
           className="text-center mb-8"
         >
           <h1 className="text-3xl md:text-4xl font-bold mb-2 text-balance">
-            Your Selfie, Your Memes ✨
+            Your Face, Your Cards 🃏
           </h1>
           <p className="text-muted-foreground text-pretty">
-            Take a photo or upload from gallery
+            Take a selfie to generate your cards
           </p>
         </motion.div>
 
@@ -273,7 +271,6 @@ export default function UploadSelfieScreen({
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
           >
-            {/* Camera button */}
             <button
               onClick={startWebcam}
               className={`relative flex flex-col items-center justify-center w-56 h-56 mx-auto rounded-full cursor-pointer glass border-2 border-dashed transition-all duration-300 ${
@@ -292,7 +289,6 @@ export default function UploadSelfieScreen({
               </div>
             </button>
 
-            {/* Gallery option */}
             <label
               htmlFor="selfie-upload"
               className="flex items-center gap-2 text-sm text-muted-foreground underline underline-offset-4 cursor-pointer hover:text-foreground transition-colors"
@@ -378,7 +374,7 @@ export default function UploadSelfieScreen({
           </motion.div>
         )}
 
-        {/* Nickname input — show in preview mode */}
+        {/* Nickname input */}
         {mode === "preview" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -421,7 +417,7 @@ export default function UploadSelfieScreen({
               className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300 rounded-xl disabled:opacity-50"
             >
               <Sparkles className="w-5 h-5 mr-2" />
-              Generate My Memes
+              Generate My Cards
             </Button>
           </motion.div>
         )}
