@@ -51,7 +51,7 @@ export default function LandingScreen({ onNavigate }: LandingScreenProps) {
           <span className="text-foreground">The Most Unhinged Thing</span>
           <br />
           <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient neon-text">
-            You'll Do For  LOVE 💜
+            You'll Do For  LOVE 🫀
           </span>
         </motion.h1>
 
