@@ -185,6 +185,31 @@ const QUESTIONS = [
 
 // Cloud splitting intro
 function CloudIntro({ onReady }: { onReady: () => void }) {
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+
+  React.useEffect(() => {
+    // Start song when clouds split (delay matches cloud animation: 1.5s)
+    const timer = setTimeout(() => {
+      if (!audioRef.current) {
+        audioRef.current = new Audio("/rude.mp3");
+        audioRef.current.volume = 0.6;
+        audioRef.current.loop = true;
+        audioRef.current.play().catch(() => {});
+      }
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Store audio ref on window so slideshow can keep it playing
+  React.useEffect(() => {
+    return () => {
+      // Don't stop on unmount — keep playing through slides
+      if (audioRef.current) {
+        (window as any).__bgAudio = audioRef.current;
+      }
+    };
+  }, []);
+
   return (
     <motion.div
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 overflow-hidden"
