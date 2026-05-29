@@ -266,10 +266,10 @@ function CloudIntro({ onReady }: { onReady: () => void }) {
           initial={{ opacity: 0, scale: 0.5, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ delay: 3.0, duration: 0.5, type: "spring" }}
-          className="mb-3 bg-white rounded-2xl px-5 py-3 shadow-2xl relative"
-          style={{ maxWidth: "220px" }}
+          className="mb-4 bg-white rounded-2xl px-6 py-4 shadow-2xl relative"
+          style={{ maxWidth: "260px" }}
         >
-          <p className="text-gray-800 text-sm font-semibold text-center leading-snug">
+          <p className="text-gray-800 text-base font-bold text-center leading-snug">
             🌷 These are for you 🌷
           </p>
           {/* Bubble tail */}
@@ -289,7 +289,7 @@ function CloudIntro({ onReady }: { onReady: () => void }) {
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 2.2 }}
           style={{ fontSize: "0px", lineHeight: 0 }}
         >
-          <svg width="130" height="150" viewBox="0 0 130 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="180" height="210" viewBox="0 0 130 150" fill="none" xmlns="http://www.w3.org/2000/svg">
             {/* Ears */}
             <circle cx="28" cy="32" r="18" fill="#C68642"/>
             <circle cx="28" cy="32" r="11" fill="#E8A96A"/>
@@ -341,7 +341,7 @@ function CloudIntro({ onReady }: { onReady: () => void }) {
       {[...Array(8)].map((_, i) => (
         <motion.div
           key={`petal-${i}`}
-          className="absolute text-xl select-none pointer-events-none"
+          className="absolute text-3xl select-none pointer-events-none"
           style={{ left: `${15 + i * 10}%`, top: "110%" }}
           initial={{ y: 0, opacity: 0, rotate: 0 }}
           animate={{
@@ -402,8 +402,8 @@ function CloudIntro({ onReady }: { onReady: () => void }) {
 const SCENE_FACE_CONFIG: Record<string, { cx: number; cy: number; r: number; imgW: number; imgH: number; behindImage?: boolean }> = {
   sofa:      { cx: 274,  cy: 244,  r: 155, imgW: 1372, imgH: 872 },
   astronaut: { cx: 1027, cy: 304,  r: 88,  imgW: 1334, imgH: 896 },
-  clock:     { cx: 415,  cy: 335,  r: 290, imgW: 831,  imgH: 1109 },
-  earth:     { cx: 640,  cy: 476,  r: 400, imgW: 1278, imgH: 952 },
+  clock:     { cx: 415,  cy: 335,  r: 220, imgW: 831,  imgH: 1109 },
+  earth:     { cx: 640,  cy: 476,  r: 280, imgW: 1278, imgH: 952 },
   bandaid:   { cx: 530,  cy: 480,  r: 160, imgW: 1112, imgH: 1049 },
   ruler:     { cx: 300,  cy: 240,  r: 130, imgW: 1102, imgH: 868 },
   kitkat:    { cx: 460,  cy: 200,  r: 160, imgW: 1028, imgH: 763 },
@@ -458,7 +458,7 @@ async function compositeOnCanvas(
           const fdh = faceImg.naturalHeight * fScale;
           ctx.drawImage(faceImg, faceCX - fdw / 2, faceCY - fdh / 2, fdw, fdh);
           ctx.restore();
-          ctx.globalAlpha = 0.82;
+          ctx.globalAlpha = 0.92;
           ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
           ctx.globalAlpha = 1;
         } else {
@@ -599,7 +599,7 @@ function SlideCard({
         ) : (
           <img src={question.image} alt={question.question} className="w-full h-full object-cover" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none" />
       </motion.div>
 
       {/* Reveal text */}
@@ -656,6 +656,20 @@ export default function MemeRevealScreen({
 
   const senderUrl = userData.selfieUrl;
   const receiverUrl = userData.partnerSelfieUrl;
+
+  const stopAudio = () => {
+    const audio = (window as any).__bgAudio as HTMLAudioElement | undefined;
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+      (window as any).__bgAudio = null;
+    }
+  };
+
+  const handleExit = () => {
+    stopAudio();
+    onNavigate("final");
+  };
 
   const handleNext = () => {
     if (currentIndex === QUESTIONS.length - 1) {
@@ -741,7 +755,7 @@ export default function MemeRevealScreen({
                 </p>
                 <Button
                   size="lg"
-                  onClick={() => onNavigate("final")}
+                  onClick={() => handleExit()}
                   className="w-full h-12 font-semibold bg-gradient-to-r from-primary to-secondary rounded-xl"
                 >
                   Exit
@@ -760,7 +774,7 @@ export default function MemeRevealScreen({
                 <div className="flex gap-3">
                   <Button
                     variant="outline"
-                    onClick={() => onNavigate("final")}
+                    onClick={() => handleExit()}
                     className="flex-1 h-11 rounded-xl border-border/50"
                   >
                     Skip & Exit
@@ -814,4 +828,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-                         }
+        }
