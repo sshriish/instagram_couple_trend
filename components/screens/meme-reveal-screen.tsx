@@ -312,18 +312,15 @@ async function compositeOnCanvas(
   faceSrc: string,
   sceneName: string
 ): Promise<string> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const config = SCENE_FACE_CONFIG[sceneName];
-    if (!config) return reject("Unknown scene");
+    // If no config, just return the background as-is
+    if (!config) { resolve(bgSrc); return; }
 
-    const CARD = 600; // output canvas size
-
-    // Calculate object-cover scale
+    const CARD = 600;
     const scale = Math.max(CARD / config.imgW, CARD / config.imgH);
     const offsetX = (config.imgW * scale - CARD) / 2;
     const offsetY = (config.imgH * scale - CARD) / 2;
-
-    // Face circle position in card pixels
     const faceCX = config.cx * scale - offsetX;
     const faceCY = config.cy * scale - offsetY;
     const faceR  = config.r * scale;
@@ -335,6 +332,7 @@ async function compositeOnCanvas(
 
     const bgImg = new Image();
     const faceImg = new Image();
+    // Try with crossOrigin first
     bgImg.crossOrigin = "anonymous";
     faceImg.crossOrigin = "anonymous";
 
@@ -343,57 +341,58 @@ async function compositeOnCanvas(
 
     const tryDraw = () => {
       if (!bgLoaded || !faceLoaded) return;
-
-      if (config.behindImage) {
-        // Ghost: face first, then scene image at 80% opacity on top
-        // Draw face circle
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(faceCX, faceCY, faceR, 0, Math.PI * 2);
-        ctx.clip();
-        ctx.drawImage(faceImg, faceCX - faceR, faceCY - faceR, faceR * 2, faceR * 2);
-        ctx.restore();
-        // Draw scene on top semi-transparent
-        ctx.globalAlpha = 0.82;
-        ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
-        ctx.globalAlpha = 1;
-      } else {
-        // Normal: scene first, face circle on top
-        ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
-        // Clip to circle and draw face
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(faceCX, faceCY, faceR, 0, Math.PI * 2);
-        ctx.clip();
-        // Draw face image centered on the circle
-        const faceAspect = faceImg.naturalWidth / faceImg.naturalHeight;
-        let fw = faceR * 2;
-        let fh = faceR * 2;
-        if (faceAspect > 1) { fh = fw / faceAspect; } else { fw = fh * faceAspect; }
-        // Cover fill
-        const fScale = Math.max((faceR * 2) / faceImg.naturalWidth, (faceR * 2) / faceImg.naturalHeight);
-        const fdw = faceImg.naturalWidth * fScale;
-        const fdh = faceImg.naturalHeight * fScale;
-        ctx.drawImage(faceImg, faceCX - fdw / 2, faceCY - fdh / 2, fdw, fdh);
-        ctx.restore();
-        // Thin white ring around face
-        ctx.beginPath();
-        ctx.arc(faceCX, faceCY, faceR + 2, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(255,255,255,0.3)";
-        ctx.lineWidth = 4;
-        ctx.stroke();
+      try {
+        if (config.behindImage) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(faceCX, faceCY, faceR, 0, Math.PI * 2);
+          ctx.clip();
+          const fScale = Math.max((faceR * 2) / faceImg.naturalWidth, (faceR * 2) / faceImg.naturalHeight);
+          const fdw = faceImg.naturalWidth * fScale;
+          const fdh = faceImg.naturalHeight * fScale;
+          ctx.drawImage(faceImg, faceCX - fdw / 2, faceCY - fdh / 2, fdw, fdh);
+          ctx.restore();
+          ctx.globalAlpha = 0.82;
+          ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
+          ctx.globalAlpha = 1;
+        } else {
+          ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(faceCX, faceCY, faceR, 0, Math.PI * 2);
+          ctx.clip();
+          const fScale = Math.max((faceR * 2) / faceImg.naturalWidth, (faceR * 2) / faceImg.naturalHeight);
+          const fdw = faceImg.naturalWidth * fScale;
+          const fdh = faceImg.naturalHeight * fScale;
+          ctx.drawImage(faceImg, faceCX - fdw / 2, faceCY - fdh / 2, fdw, fdh);
+          ctx.restore();
+          ctx.beginPath();
+          ctx.arc(faceCX, faceCY, faceR + 2, 0, Math.PI * 2);
+          ctx.strokeStyle = "rgba(255,255,255,0.3)";
+          ctx.lineWidth = 4;
+          ctx.stroke();
+        }
+        // Try to export — may throw SecurityError if CORS blocked
+        const result = canvas.toDataURL("image/jpeg", 0.92);
+        resolve(result);
+      } catch {
+        // CORS blocked canvas export — fall back to CSS overlay mode
+        resolve("__css_fallback__");
       }
-
-      resolve(canvas.toDataURL("image/jpeg", 0.92));
     };
+
+    // If background fails to load, resolve with fallback
+    bgImg.onerror = () => resolve("__css_fallback__");
+    faceImg.onerror = () => resolve("__css_fallback__");
 
     bgImg.onload = () => { bgLoaded = true; tryDraw(); };
     faceImg.onload = () => { faceLoaded = true; tryDraw(); };
-    bgImg.onerror = reject;
-    faceImg.onerror = reject;
 
     bgImg.src = bgSrc;
     faceImg.src = faceSrc;
+
+    // Timeout safety — if images take too long, fall back
+    setTimeout(() => resolve("__css_fallback__"), 8000);
   });
 }
 
@@ -434,7 +433,11 @@ function SlideCard({
 
     compositeOnCanvas(question.image, faceUrl, sceneName)
       .then(dataUrl => {
-        setCompositeSrc(dataUrl);
+        if (dataUrl === "__css_fallback__") {
+          setCompositeSrc(null); // will show CSS overlay fallback
+        } else {
+          setCompositeSrc(dataUrl);
+        }
         setLoading(false);
       })
       .catch(() => {
@@ -705,4 +708,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-                      }
+            }
