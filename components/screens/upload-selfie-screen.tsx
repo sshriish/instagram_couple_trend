@@ -113,9 +113,9 @@ export default function UploadSelfieScreen({
       const shareLink = `${window.location.origin}/share/${token}`;
 
       clearInterval(textInterval);
-      onUpdateUserData({ selfieUrl, nickname: nickname || "babe", shareLink });
+      onUpdateUserData({ selfieUrl, nickname: nickname || "babe", shareLink, token });
       setIsProcessing(false);
-      onNavigate("link-generated");
+      onNavigate("waiting");
     } catch (err: any) {
       console.error(err);
       clearInterval(textInterval);
