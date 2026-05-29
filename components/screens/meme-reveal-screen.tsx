@@ -292,6 +292,111 @@ function CloudIntro({ onReady }: { onReady: () => void }) {
   );
 }
 
+// Per-scene face placement config (pixel coords in original image)
+const SCENE_FACE_CONFIG: Record<string, { cx: number; cy: number; r: number; imgW: number; imgH: number; behindImage?: boolean }> = {
+  sofa:      { cx: 274,  cy: 244,  r: 155, imgW: 1372, imgH: 872 },
+  astronaut: { cx: 1027, cy: 304,  r: 88,  imgW: 1334, imgH: 896 },
+  clock:     { cx: 415,  cy: 335,  r: 290, imgW: 831,  imgH: 1109 },
+  earth:     { cx: 640,  cy: 476,  r: 400, imgW: 1278, imgH: 952 },
+  bandaid:   { cx: 530,  cy: 480,  r: 160, imgW: 1112, imgH: 1049 },
+  ruler:     { cx: 300,  cy: 240,  r: 130, imgW: 1102, imgH: 868 },
+  kitkat:    { cx: 460,  cy: 200,  r: 160, imgW: 1028, imgH: 763 },
+  steering:  { cx: 640,  cy: 460,  r: 175, imgW: 1316, imgH: 908 },
+  sun:       { cx: 397,  cy: 353,  r: 95,  imgW: 698,  imgH: 680 },
+  ghost:     { cx: 570,  cy: 530,  r: 220, imgW: 1232, imgH: 960, behindImage: true },
+};
+
+// Client-side canvas compositing — works on Vercel, no server needed
+async function compositeOnCanvas(
+  bgSrc: string,
+  faceSrc: string,
+  sceneName: string
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const config = SCENE_FACE_CONFIG[sceneName];
+    if (!config) return reject("Unknown scene");
+
+    const CARD = 600; // output canvas size
+
+    // Calculate object-cover scale
+    const scale = Math.max(CARD / config.imgW, CARD / config.imgH);
+    const offsetX = (config.imgW * scale - CARD) / 2;
+    const offsetY = (config.imgH * scale - CARD) / 2;
+
+    // Face circle position in card pixels
+    const faceCX = config.cx * scale - offsetX;
+    const faceCY = config.cy * scale - offsetY;
+    const faceR  = config.r * scale;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = CARD;
+    canvas.height = CARD;
+    const ctx = canvas.getContext("2d")!;
+
+    const bgImg = new Image();
+    const faceImg = new Image();
+    bgImg.crossOrigin = "anonymous";
+    faceImg.crossOrigin = "anonymous";
+
+    let bgLoaded = false;
+    let faceLoaded = false;
+
+    const tryDraw = () => {
+      if (!bgLoaded || !faceLoaded) return;
+
+      if (config.behindImage) {
+        // Ghost: face first, then scene image at 80% opacity on top
+        // Draw face circle
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(faceCX, faceCY, faceR, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(faceImg, faceCX - faceR, faceCY - faceR, faceR * 2, faceR * 2);
+        ctx.restore();
+        // Draw scene on top semi-transparent
+        ctx.globalAlpha = 0.82;
+        ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
+        ctx.globalAlpha = 1;
+      } else {
+        // Normal: scene first, face circle on top
+        ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
+        // Clip to circle and draw face
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(faceCX, faceCY, faceR, 0, Math.PI * 2);
+        ctx.clip();
+        // Draw face image centered on the circle
+        const faceAspect = faceImg.naturalWidth / faceImg.naturalHeight;
+        let fw = faceR * 2;
+        let fh = faceR * 2;
+        if (faceAspect > 1) { fh = fw / faceAspect; } else { fw = fh * faceAspect; }
+        // Cover fill
+        const fScale = Math.max((faceR * 2) / faceImg.naturalWidth, (faceR * 2) / faceImg.naturalHeight);
+        const fdw = faceImg.naturalWidth * fScale;
+        const fdh = faceImg.naturalHeight * fScale;
+        ctx.drawImage(faceImg, faceCX - fdw / 2, faceCY - fdh / 2, fdw, fdh);
+        ctx.restore();
+        // Thin white ring around face
+        ctx.beginPath();
+        ctx.arc(faceCX, faceCY, faceR + 2, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(255,255,255,0.3)";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+      }
+
+      resolve(canvas.toDataURL("image/jpeg", 0.92));
+    };
+
+    bgImg.onload = () => { bgLoaded = true; tryDraw(); };
+    faceImg.onload = () => { faceLoaded = true; tryDraw(); };
+    bgImg.onerror = reject;
+    faceImg.onerror = reject;
+
+    bgImg.src = bgSrc;
+    faceImg.src = faceSrc;
+  });
+}
+
 // Single slide card
 function SlideCard({
   question,
@@ -312,8 +417,30 @@ function SlideCard({
   index: number;
   total: number;
 }) {
-  const faceUrl =
-    question.faceTarget === "receiver" ? receiverUrl : senderUrl;
+  const faceUrl = question.faceTarget === "receiver" ? receiverUrl : senderUrl;
+  const [compositeSrc, setCompositeSrc] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (!faceUrl) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setCompositeSrc(null);
+
+    const sceneName = question.image.replace("/images/", "").replace(".png", "");
+
+    compositeOnCanvas(question.image, faceUrl, sceneName)
+      .then(dataUrl => {
+        setCompositeSrc(dataUrl);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  }, [question.id, faceUrl]);
 
   return (
     <motion.div
@@ -346,7 +473,7 @@ function SlideCard({
         {question.question}
       </motion.h2>
 
-      {/* Image with face */}
+      {/* Composited image */}
       <motion.div
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -354,68 +481,16 @@ function SlideCard({
         className="relative w-full rounded-3xl overflow-hidden shadow-2xl border-2 border-white/10"
         style={{ aspectRatio: "1" }}
       >
-        {question.faceConfig.behindImage ? (
-          // Ghost mode: face first, then scene image on top (both absolute)
-          <>
-            {/* Face layer — behind the ghost */}
-            {faceUrl && (
-              <div
-                className="absolute overflow-hidden"
-                style={{
-                  top: question.faceConfig.top,
-                  left: question.faceConfig.left,
-                  width: question.faceConfig.width,
-                  height: question.faceConfig.height,
-                  borderRadius: question.faceConfig.shape,
-                  opacity: question.faceConfig.opacity,
-                  zIndex: 1,
-                }}
-              >
-                <img src={faceUrl} alt="face" className="w-full h-full object-cover"
-                  style={{ filter: question.faceConfig.filter }} />
-              </div>
-            )}
-            {/* Ghost image on top — semi-transparent so face shows through */}
-            <img
-              src={question.image}
-              alt={question.question}
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{ zIndex: 2, opacity: 0.82, mixBlendMode: "normal" }}
-            />
-          </>
+        {loading ? (
+          <div className="w-full h-full bg-white/5 animate-pulse flex items-center justify-center">
+            <div className="text-white/40 text-sm">Loading…</div>
+          </div>
+        ) : compositeSrc ? (
+          <img src={compositeSrc} alt={question.question} className="w-full h-full object-cover" />
         ) : (
-          // Normal mode: scene image first, face on top
-          <>
-            <img
-              src={question.image}
-              alt={question.question}
-              className="w-full h-full object-cover"
-            />
-            {faceUrl && (
-              <div
-                className="absolute overflow-hidden"
-                style={{
-                  top: question.faceConfig.top,
-                  left: question.faceConfig.left,
-                  width: question.faceConfig.width,
-                  height: question.faceConfig.height,
-                  borderRadius: question.faceConfig.shape,
-                  mixBlendMode: question.faceConfig.blendMode as any,
-                  opacity: question.faceConfig.opacity,
-                  transform: question.faceConfig.rotate ? `rotate(${question.faceConfig.rotate})` : undefined,
-                  boxShadow: "0 0 0 3px rgba(255,255,255,0.18), 0 4px 24px rgba(0,0,0,0.45)",
-                  zIndex: 1,
-                }}
-              >
-                <img src={faceUrl} alt="face" className="w-full h-full object-cover"
-                  style={{ filter: question.faceConfig.filter }} />
-              </div>
-            )}
-          </>
+          <img src={question.image} alt={question.question} className="w-full h-full object-cover" />
         )}
-
-        {/* Subtle vignette */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" style={{ zIndex: 3 }} />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
       </motion.div>
 
       {/* Reveal text */}
