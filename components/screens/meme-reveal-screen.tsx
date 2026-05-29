@@ -28,7 +28,7 @@ const QUESTIONS = [
     faceTarget: "sender",
     // Empty left recliner — face on the seat, below the backrest
     faceConfig: {
-      top: "48%", left: "8%", width: "36%", height: "36%",
+      top: "13.1%", left: "-12.2%", width: "29.8%", height: "29.8%",
       shape: "50%",
       blendMode: "normal",
       opacity: 0.95,
@@ -44,7 +44,7 @@ const QUESTIONS = [
     faceTarget: "sender",
     // Helmet visor — dark reflective oval, upper right of the astronaut
     faceConfig: {
-      top: "8%", left: "58%", width: "22%", height: "20%",
+      top: "24.1%", left: "80.4%", width: "19.6%", height: "19.6%",
       shape: "50% / 48%",
       blendMode: "normal",
       opacity: 0.95,
@@ -157,7 +157,7 @@ const QUESTIONS = [
     faceTarget: "receiver",
     // Inner golden sun circle — sits lower-center in the artwork
     faceConfig: {
-      top: "42%", left: "30%", width: "38%", height: "36%",
+      top: "37.9%", left: "43.1%", width: "27.9%", height: "27.9%",
       shape: "50%",
       blendMode: "normal",
       opacity: 0.95,
@@ -605,4 +605,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-                }
+                      }
