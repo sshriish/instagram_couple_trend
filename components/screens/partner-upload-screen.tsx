@@ -28,19 +28,38 @@ export default function PartnerUploadScreen({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const startWebcam = async () => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert("Camera not supported on this browser. Please use Chrome or Safari and make sure you're on HTTPS.");
+      return;
+    }
     try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
-      });
+      let mediaStream: MediaStream;
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: "user" }, width: { ideal: 1280 }, height: { ideal: 720 } },
+        });
+      } catch {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+      }
       setStream(mediaStream);
       setMode("camera");
-      setTimeout(() => {
+      const attachStream = () => {
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
+          videoRef.current.play().catch(() => {});
+        } else {
+          setTimeout(attachStream, 100);
         }
-      }, 100);
-    } catch (err) {
-      alert("Could not access camera. Please allow camera permission and try again.");
+      };
+      setTimeout(attachStream, 100);
+    } catch (err: any) {
+      if (err?.name === "NotAllowedError" || err?.name === "PermissionDeniedError") {
+        alert("Camera access was denied. Please go to your browser settings and allow camera permission for this site, then try again.");
+      } else if (err?.name === "NotFoundError") {
+        alert("No camera found on this device.");
+      } else {
+        alert("Could not access camera. Please allow camera permission and try again.\n\nError: " + (err?.message || err));
+      }
     }
   };
 
@@ -119,7 +138,6 @@ export default function PartnerUploadScreen({
       <ParticleField />
       <canvas ref={canvasRef} className="hidden" />
 
-      {/* Back button */}
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -129,7 +147,6 @@ export default function PartnerUploadScreen({
         <ArrowLeft className="w-5 h-5" />
       </motion.button>
 
-      {/* Unlocking overlay */}
       <AnimatePresence>
         {isUnlocking && (
           <motion.div
@@ -166,7 +183,6 @@ export default function PartnerUploadScreen({
       </AnimatePresence>
 
       <div className="relative z-10 w-full max-w-md mx-auto flex flex-col items-center">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -181,7 +197,6 @@ export default function PartnerUploadScreen({
           </p>
         </motion.div>
 
-        {/* CHOOSE mode */}
         {mode === "choose" && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -204,7 +219,6 @@ export default function PartnerUploadScreen({
           </motion.div>
         )}
 
-        {/* CAMERA mode */}
         {mode === "camera" && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -241,7 +255,6 @@ export default function PartnerUploadScreen({
           </motion.div>
         )}
 
-        {/* PREVIEW mode */}
         {mode === "preview" && selfie && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -285,7 +298,6 @@ export default function PartnerUploadScreen({
           </motion.div>
         )}
 
-        {/* Privacy note */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
