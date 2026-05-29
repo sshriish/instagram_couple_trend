@@ -26,9 +26,9 @@ const QUESTIONS = [
     emoji: "🪑",
     image: "/images/sofa.png",
     faceTarget: "sender",
-    // Empty left recliner cushion — face sits cleanly on the seat
+    // Empty left recliner cushion — face sits on the seat area
     faceConfig: {
-      top: "20%", left: "5%", width: "38%", height: "38%",
+      top: "38%", left: "5%", width: "38%", height: "38%",
       shape: "50%",
       blendMode: "normal",
       opacity: 0.95,
@@ -42,12 +42,12 @@ const QUESTIONS = [
     emoji: "🚀",
     image: "/images/astronaut.png",
     faceTarget: "sender",
-    // Helmet visor — dark oval in upper-right of image
+    // Helmet visor — the dark reflective oval on the helmet
     faceConfig: {
-      top: "12%", left: "52%", width: "26%", height: "22%",
-      shape: "50% / 45%",
+      top: "15%", left: "55%", width: "24%", height: "20%",
+      shape: "50% / 48%",
       blendMode: "normal",
-      opacity: 0.92,
+      opacity: 0.95,
       filter: "brightness(1.0) contrast(1.1)",
     },
   },
@@ -79,7 +79,7 @@ const QUESTIONS = [
       top: "8%", left: "12%", width: "76%", height: "76%",
       shape: "50%",
       blendMode: "normal",
-      opacity: 0.45,
+      opacity: 0.75,
       filter: "brightness(1.1) contrast(1.0)",
     },
   },
@@ -155,13 +155,13 @@ const QUESTIONS = [
     emoji: "☀️",
     image: "/images/sun.png",
     faceTarget: "receiver",
-    // Inner golden sun circle — center of the artwork
+    // Inner golden sun circle — center lower area of the artwork
     faceConfig: {
-      top: "34%", left: "30%", width: "38%", height: "35%",
+      top: "38%", left: "28%", width: "40%", height: "38%",
       shape: "50%",
       blendMode: "normal",
-      opacity: 0.92,
-      filter: "brightness(1.1) contrast(1.0)",
+      opacity: 0.95,
+      filter: "brightness(1.05) contrast(1.0)",
     },
   },
   {
@@ -171,13 +171,13 @@ const QUESTIONS = [
     emoji: "👻",
     image: "/images/ghost.png",
     faceTarget: "sender",
-    // Ghost body center — face visible on the white ghost body, ghost drawn on top via z layering
+    // Ghost body center — face renders behind, ghost PNG on top at 82% opacity
     faceConfig: {
-      top: "28%", left: "26%", width: "48%", height: "44%",
+      top: "30%", left: "22%", width: "56%", height: "52%",
       shape: "50%",
       blendMode: "normal",
-      opacity: 0.90,
-      filter: "brightness(1.05) contrast(1.0)",
+      opacity: 1.0,
+      filter: "brightness(1.0) contrast(1.05)",
       behindImage: true,
     },
   },
@@ -321,7 +321,7 @@ function SlideCard({
         {question.question}
       </motion.h2>
 
-      {/* Image with face blend */}
+      {/* Image with face */}
       <motion.div
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -329,65 +329,68 @@ function SlideCard({
         className="relative w-full rounded-3xl overflow-hidden shadow-2xl border-2 border-white/10"
         style={{ aspectRatio: "1" }}
       >
-        {/* Base image — rendered on top for ghost so ghost lines overlay the face */}
-        {question.faceConfig.behindImage && faceUrl && (
-          <div
-            className="absolute overflow-hidden"
-            style={{
-              top: question.faceConfig.top,
-              left: question.faceConfig.left,
-              width: question.faceConfig.width,
-              height: question.faceConfig.height,
-              borderRadius: question.faceConfig.shape,
-              opacity: question.faceConfig.opacity,
-              transform: question.faceConfig.rotate ? `rotate(${question.faceConfig.rotate})` : undefined,
-            }}
-          >
+        {question.faceConfig.behindImage ? (
+          // Ghost mode: face first, then scene image on top (both absolute)
+          <>
+            {/* Face layer — behind the ghost */}
+            {faceUrl && (
+              <div
+                className="absolute overflow-hidden"
+                style={{
+                  top: question.faceConfig.top,
+                  left: question.faceConfig.left,
+                  width: question.faceConfig.width,
+                  height: question.faceConfig.height,
+                  borderRadius: question.faceConfig.shape,
+                  opacity: question.faceConfig.opacity,
+                  zIndex: 1,
+                }}
+              >
+                <img src={faceUrl} alt="face" className="w-full h-full object-cover"
+                  style={{ filter: question.faceConfig.filter }} />
+              </div>
+            )}
+            {/* Ghost image on top — semi-transparent so face shows through */}
             <img
-              src={faceUrl}
-              alt="face"
-              className="w-full h-full object-cover"
-              style={{ filter: question.faceConfig.filter }}
+              src={question.image}
+              alt={question.question}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ zIndex: 2, opacity: 0.82, mixBlendMode: "normal" }}
             />
-          </div>
-        )}
-
-        {/* Base scene image */}
-        <img
-          src={question.image}
-          alt={question.question}
-          className="w-full h-full object-cover"
-          style={{ position: "relative", zIndex: question.faceConfig.behindImage ? 2 : 0 }}
-        />
-
-        {/* Face on top (all slides except ghost) */}
-        {!question.faceConfig.behindImage && faceUrl && (
-          <div
-            className="absolute overflow-hidden"
-            style={{
-              top: question.faceConfig.top,
-              left: question.faceConfig.left,
-              width: question.faceConfig.width,
-              height: question.faceConfig.height,
-              borderRadius: question.faceConfig.shape,
-              mixBlendMode: question.faceConfig.blendMode as any,
-              opacity: question.faceConfig.opacity,
-              transform: question.faceConfig.rotate ? `rotate(${question.faceConfig.rotate})` : undefined,
-              boxShadow: "0 0 0 3px rgba(255,255,255,0.15), 0 4px 20px rgba(0,0,0,0.4)",
-              zIndex: 1,
-            }}
-          >
+          </>
+        ) : (
+          // Normal mode: scene image first, face on top
+          <>
             <img
-              src={faceUrl}
-              alt="face"
+              src={question.image}
+              alt={question.question}
               className="w-full h-full object-cover"
-              style={{ filter: question.faceConfig.filter }}
             />
-          </div>
+            {faceUrl && (
+              <div
+                className="absolute overflow-hidden"
+                style={{
+                  top: question.faceConfig.top,
+                  left: question.faceConfig.left,
+                  width: question.faceConfig.width,
+                  height: question.faceConfig.height,
+                  borderRadius: question.faceConfig.shape,
+                  mixBlendMode: question.faceConfig.blendMode as any,
+                  opacity: question.faceConfig.opacity,
+                  transform: question.faceConfig.rotate ? `rotate(${question.faceConfig.rotate})` : undefined,
+                  boxShadow: "0 0 0 3px rgba(255,255,255,0.18), 0 4px 24px rgba(0,0,0,0.45)",
+                  zIndex: 1,
+                }}
+              >
+                <img src={faceUrl} alt="face" className="w-full h-full object-cover"
+                  style={{ filter: question.faceConfig.filter }} />
+              </div>
+            )}
+          </>
         )}
 
         {/* Subtle vignette */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" style={{ zIndex: 3 }} />
       </motion.div>
 
       {/* Reveal text */}
@@ -602,4 +605,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-      }
+          }
