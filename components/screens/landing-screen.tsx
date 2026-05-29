@@ -22,71 +22,66 @@ export default function LandingScreen({ onNavigate }: LandingScreenProps) {
     >
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/20" />
-      
-      {/* Animated background elements */}
       <ParticleField />
       <FloatingMemes />
 
-      {/* Main content */}
       <div className="relative z-10 flex flex-col items-center text-center max-w-lg mx-auto">
-        {/* Logo/Badge */}
+        {/* Badge */}
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
           className="mb-6"
         >
-          <div className="glass rounded-full px-4 py-2 flex items-center gap-2">
+          <div className="glass rounded-full px-4 py-2 flex items-center gap-2 border border-primary/20">
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-foreground/80">
-              The Viral Couple Meme Experience
+              The Viral Couple Meme Trend
             </span>
           </div>
         </motion.div>
 
-        {/* Main headline */}
+        {/* Heading */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
+          transition={{ delay: 0.3 }}
           className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4 text-balance"
         >
-          <span className="text-foreground">Turn Your Face Into</span>
+          <span className="text-foreground">The Most Unhinged Thing</span>
           <br />
           <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent animate-gradient neon-text">
-            Emotional Damage
+            You'll Do For Love 💜
           </span>
         </motion.h1>
 
-        {/* Subheadline */}
+        {/* Subtext */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
+          transition={{ delay: 0.4 }}
           className="text-lg md:text-xl text-muted-foreground mb-8 max-w-md text-pretty"
         >
-          Create personalized memes where your face literally becomes what you say.
-          Send it to your partner. Watch them lose it.
+          A personalized meme trap. Built for your partner. Powered by your face.
         </motion.p>
 
-        {/* Example phrases */}
+        {/* Chips */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
           className="flex flex-wrap justify-center gap-2 mb-10"
         >
           {[
-            { phrase: '"I need time"', emoji: "⏰" },
-            { phrase: '"I need space"', emoji: "🚀" },
-            { phrase: '"I can\'t stand you"', emoji: "🪑" },
-            { phrase: '"You are my world"', emoji: "🌍" },
-          ].map((item, index) => (
+            { emoji: "🌍", phrase: "worldwide trend" },
+            { emoji: "🔞", phrase: "too real for some couples" },
+            { emoji: "📩", phrase: "one link, one reaction" },
+          ].map((item, i) => (
             <motion.div
               key={item.phrase}
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.8 + index * 0.1, type: "spring" }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6 + i * 0.1 }}
               className="glass rounded-full px-3 py-1.5 text-sm flex items-center gap-1.5"
             >
               <span>{item.emoji}</span>
@@ -95,12 +90,12 @@ export default function LandingScreen({ onNavigate }: LandingScreenProps) {
           ))}
         </motion.div>
 
-        {/* CTA Buttons */}
+        {/* Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          className="flex flex-col sm:flex-row gap-4 w-full max-w-sm"
+          transition={{ delay: 0.7 }}
+          className="flex flex-wrap justify-center gap-3 mb-8"
         >
           <Button
             size="lg"
@@ -121,39 +116,28 @@ export default function LandingScreen({ onNavigate }: LandingScreenProps) {
           </Button>
         </motion.div>
 
-        {/* Trust indicators */}
+        {/* Footer trust badges */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
+          transition={{ delay: 0.8 }}
           className="mt-8 flex items-center gap-4 text-sm text-muted-foreground"
         >
-          <span className="flex items-center gap-1">
-            <span className="text-primary">✓</span> Free forever
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="text-primary">✓</span> No signup
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="text-primary">✓</span> 100% chaos
-          </span>
+          <span><span className="text-primary">✓</span> Free forever</span>
+          <span><span className="text-primary">✓</span> No signup</span>
+          <span><span className="text-primary">✓</span> 100% chaos</span>
         </motion.div>
-      </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
+        {/* Scroll indicator */}
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, 8, 0] }}
+          transition={{ delay: 1, duration: 2, repeat: Infinity }}
+          className="mt-8"
         >
           <ChevronDown className="w-6 h-6 text-muted-foreground" />
         </motion.div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
