@@ -34,7 +34,12 @@ export default function UploadSelfieScreen({
   const [loadingTextIndex, setLoadingTextIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [mode, setMode] = useState<"choose" | "camera" | "preview">("choose");
+  const [stream, setStream] = useState<MediaStream | null>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -43,6 +48,7 @@ export default function UploadSelfieScreen({
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelfie(reader.result as string);
+        setMode("preview");
       };
       reader.readAsDataURL(file);
     }
@@ -57,6 +63,7 @@ export default function UploadSelfieScreen({
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelfie(reader.result as string);
+        setMode("preview");
       };
       reader.readAsDataURL(file);
     }
@@ -72,6 +79,63 @@ export default function UploadSelfieScreen({
     setIsDragging(false);
   }, []);
 
+  const startWebcam = async () => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user" },
+      });
+      setStream(mediaStream);
+      setMode("camera");
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
+        }
+      }, 100);
+    } catch (err) {
+      alert("Could not access camera. Please allow camera permission or upload from gallery.");
+    }
+  };
+
+  const stopWebcam = () => {
+    stream?.getTracks().forEach((t) => t.stop());
+    setStream(null);
+    setMode("choose");
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(video, 0, 0);
+    const dataUrl = canvas.toDataURL("image/jpeg");
+
+    // Convert dataUrl to File for upload
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const file = new File([blob], "selfie.jpg", { type: "image/jpeg" });
+        setSelectedFile(file);
+      }
+    }, "image/jpeg");
+
+    setSelfie(dataUrl);
+    stopWebcam();
+    setMode("preview");
+  };
+
+  const removeSelfie = () => {
+    setSelfie(null);
+    setSelectedFile(null);
+    setErrorMsg(null);
+    setMode("choose");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   const handleGenerate = async () => {
     if (!selectedFile) return;
     setIsProcessing(true);
@@ -79,10 +143,9 @@ export default function UploadSelfieScreen({
 
     const textInterval = setInterval(() => {
       setLoadingTextIndex((prev) => (prev + 1) % loadingTexts.length);
-    }, 1500);
+    }, 1200);
 
     try {
-      // Check env vars are loaded
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
       const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
       if (!supabaseUrl || !supabaseKey) {
@@ -124,15 +187,6 @@ export default function UploadSelfieScreen({
     }
   };
 
-  const removeSelfie = () => {
-    setSelfie(null);
-    setSelectedFile(null);
-    setErrorMsg(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, x: 100 }}
@@ -141,19 +195,59 @@ export default function UploadSelfieScreen({
       transition={{ duration: 0.4 }}
       className="relative min-h-screen w-full flex flex-col items-center justify-center px-4 py-8 overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/10" />
       <ParticleField />
+      <canvas ref={canvasRef} className="hidden" />
 
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="hidden"
+        id="selfie-upload"
+      />
+
+      {/* Back button */}
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        onClick={() => onNavigate("landing")}
+        onClick={() => { stopWebcam(); onNavigate("landing"); }}
         className="absolute top-6 left-6 z-20 glass rounded-full p-2 hover:bg-muted/50 transition-colors"
       >
         <ArrowLeft className="w-5 h-5" />
       </motion.button>
 
+      {/* Processing overlay */}
+      <AnimatePresence>
+        {isProcessing && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col items-center justify-center"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              className="w-20 h-20 rounded-full border-4 border-primary/30 border-t-primary mb-6"
+            />
+            <motion.p
+              key={loadingTextIndex}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="text-lg font-medium text-center max-w-xs"
+            >
+              {loadingTexts[loadingTextIndex]}
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="relative z-10 w-full max-w-md mx-auto flex flex-col items-center">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -161,157 +255,176 @@ export default function UploadSelfieScreen({
           className="text-center mb-8"
         >
           <h1 className="text-3xl md:text-4xl font-bold mb-2 text-balance">
-            Upload Your Selfie
+            Your Selfie, Your Memes ✨
           </h1>
           <p className="text-muted-foreground text-pretty">
-            This is the face that will haunt your partner
+            Take a photo or upload from gallery
           </p>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="w-full mb-6"
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            capture="user"
-            onChange={handleFileChange}
-            className="hidden"
-            id="selfie-upload"
-          />
-
-          <AnimatePresence mode="wait">
-            {!selfie ? (
-              <motion.label
-                key="upload-area"
-                htmlFor="selfie-upload"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                className={`
-                  relative flex flex-col items-center justify-center
-                  w-64 h-64 mx-auto rounded-full cursor-pointer
-                  glass border-2 border-dashed transition-all duration-300
-                  ${isDragging
-                    ? "border-primary bg-primary/10 scale-105"
-                    : "border-border/50 hover:border-primary/50 hover:bg-muted/30"
-                  }
-                `}
-              >
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                    <Camera className="w-8 h-8 text-primary" />
-                  </div>
-                  <span className="text-sm text-muted-foreground text-center px-4">
-                    Tap to take a selfie
-                    <br />
-                    <span className="text-xs">or drag & drop</span>
-                  </span>
-                </div>
-              </motion.label>
-            ) : (
-              <motion.div
-                key="preview"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                className="relative w-64 h-64 mx-auto"
-              >
-                <div className="w-full h-full rounded-full overflow-hidden ring-4 ring-primary/50 animate-pulse-glow">
-                  <img
-                    src={selfie}
-                    alt="Your selfie"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <button
-                  onClick={removeSelfie}
-                  className="absolute -top-2 -right-2 w-10 h-10 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="w-full max-w-xs mb-6"
-        >
-          <label className="text-sm text-muted-foreground mb-2 block text-center">
-            What does your partner call you? (optional)
-          </label>
-          <Input
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            placeholder="e.g., babe, honey, chaos goblin"
-            className="text-center glass border-border/50 h-12 rounded-xl"
-          />
-        </motion.div>
-
-        {/* Error message */}
-        <AnimatePresence>
-          {errorMsg && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className="w-full max-w-xs mb-4 bg-destructive/10 border border-destructive/30 rounded-xl p-3 text-sm text-destructive text-center"
-            >
-              {errorMsg}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="w-full max-w-xs"
-        >
-          <Button
-            size="lg"
-            onClick={handleGenerate}
-            disabled={!selfie || isProcessing}
-            className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300 rounded-xl disabled:opacity-50"
+        {/* CHOOSE mode */}
+        {mode === "choose" && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col items-center gap-4 w-full"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
           >
-            {isProcessing ? (
-              <div className="flex items-center gap-2">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                >
-                  <Sparkles className="w-5 h-5" />
-                </motion.div>
-                <span className="text-sm">{loadingTexts[loadingTextIndex]}</span>
+            {/* Camera button */}
+            <button
+              onClick={startWebcam}
+              className={`relative flex flex-col items-center justify-center w-56 h-56 mx-auto rounded-full cursor-pointer glass border-2 border-dashed transition-all duration-300 ${
+                isDragging
+                  ? "border-primary bg-primary/10 scale-105"
+                  : "border-border/50 hover:border-primary/50 hover:bg-muted/30"
+              }`}
+            >
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                  <Camera className="w-7 h-7 text-primary" />
+                </div>
+                <span className="text-sm text-muted-foreground text-center px-4">
+                  Take a selfie
+                </span>
               </div>
-            ) : (
-              <>
-                <Upload className="w-5 h-5 mr-2" />
-                Generate Meme Link
-              </>
-            )}
-          </Button>
-        </motion.div>
+            </button>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-xs text-muted-foreground text-center mt-6 max-w-xs"
-        >
-          Your photo is stored securely and only shared with your partner through the link you create.
-        </motion.p>
+            {/* Gallery option */}
+            <label
+              htmlFor="selfie-upload"
+              className="flex items-center gap-2 text-sm text-muted-foreground underline underline-offset-4 cursor-pointer hover:text-foreground transition-colors"
+            >
+              <Upload className="w-4 h-4" />
+              or upload from gallery
+            </label>
+
+            {isDragging && (
+              <p className="text-sm text-primary animate-pulse">Drop it here!</p>
+            )}
+          </motion.div>
+        )}
+
+        {/* CAMERA mode */}
+        {mode === "camera" && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center gap-4 w-full"
+          >
+            <div className="relative w-64 h-64 rounded-full overflow-hidden ring-4 ring-primary/50 mx-auto">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full object-cover scale-x-[-1]"
+              />
+            </div>
+            <div className="flex gap-3">
+              <Button
+                size="lg"
+                onClick={capturePhoto}
+                className="h-14 px-8 text-lg font-semibold bg-gradient-to-r from-primary to-secondary hover:opacity-90 rounded-xl"
+              >
+                <Camera className="w-5 h-5 mr-2" />
+                Snap!
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={stopWebcam}
+                className="h-14 px-4 glass border-border/50 rounded-xl"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* PREVIEW mode */}
+        {mode === "preview" && selfie && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center gap-6 w-full"
+          >
+            <div className="relative w-56 h-56 mx-auto">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                className="absolute -inset-2 rounded-full border-2 border-dashed border-primary/50"
+              />
+              <div className="w-full h-full rounded-full overflow-hidden ring-4 ring-primary/50">
+                <img src={selfie} alt="Your selfie" className="w-full h-full object-cover" />
+              </div>
+              <button
+                onClick={removeSelfie}
+                className="absolute -top-2 -right-2 w-10 h-10 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 glass rounded-full px-3 py-1 flex items-center gap-1"
+              >
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-xs text-foreground">Looking good!</span>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Nickname input — show in preview mode */}
+        {mode === "preview" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="w-full max-w-xs mt-10"
+          >
+            <Input
+              placeholder="Your nickname (optional)"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              className="h-12 glass border-border/50 rounded-xl text-center"
+            />
+          </motion.div>
+        )}
+
+        {/* Error */}
+        {errorMsg && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-destructive text-sm mt-4 text-center max-w-xs"
+          >
+            {errorMsg}
+          </motion.p>
+        )}
+
+        {/* Generate button */}
+        {mode === "preview" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="w-full max-w-xs mt-4"
+          >
+            <Button
+              size="lg"
+              onClick={handleGenerate}
+              disabled={!selectedFile || isProcessing}
+              className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300 rounded-xl disabled:opacity-50"
+            >
+              <Sparkles className="w-5 h-5 mr-2" />
+              Generate My Memes
+            </Button>
+          </motion.div>
+        )}
       </div>
     </motion.div>
   );
