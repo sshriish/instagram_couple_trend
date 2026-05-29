@@ -90,7 +90,7 @@ export default function PartnerLandingScreen({
           className="mb-6"
         >
           <h1 className="text-3xl md:text-4xl font-bold mb-3 text-balance">
-            Someone turned themselves into memes for you
+            Your partner/ex-partner went full unhinged for you
           </h1>
           <p className="text-lg text-muted-foreground">
             <span className="text-primary font-semibold">
