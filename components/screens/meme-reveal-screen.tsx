@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Lock, X, ChevronLeft, ChevronRight, Heart, Flame, Download } from "lucide-react";
+import { Send, Lock, X, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { AppScreen, UserData } from "@/app/page";
 import { supabase } from "@/lib/supabase";
@@ -20,11 +20,6 @@ const QUESTIONS = [
     emoji: "🪑",
     image: "/images/sofa.png",
     faceTarget: "sender",
-    faceConfig: {
-      top: "13.1%", left: "-12.2%", width: "29.8%", height: "29.8%",
-      shape: "50%", blendMode: "normal", opacity: 0.95,
-      filter: "brightness(0.95) contrast(1.05)",
-    },
   },
   {
     id: 2,
@@ -33,11 +28,6 @@ const QUESTIONS = [
     emoji: "🚀",
     image: "/images/astronaut.png",
     faceTarget: "sender",
-    faceConfig: {
-      top: "24.1%", left: "80.4%", width: "19.6%", height: "19.6%",
-      shape: "50% / 48%", blendMode: "normal", opacity: 0.95,
-      filter: "brightness(1.0) contrast(1.1)",
-    },
   },
   {
     id: 3,
@@ -46,11 +36,6 @@ const QUESTIONS = [
     emoji: "⏰",
     image: "/images/clock.png",
     faceTarget: "sender",
-    faceConfig: {
-      top: "4%", left: "16%", width: "60%", height: "54%",
-      shape: "50%", blendMode: "normal", opacity: 0.45,
-      filter: "brightness(1.05) contrast(1.0)",
-    },
   },
   {
     id: 4,
@@ -59,11 +44,6 @@ const QUESTIONS = [
     emoji: "🌍",
     image: "/images/earth.png",
     faceTarget: "receiver",
-    faceConfig: {
-      top: "8%", left: "12%", width: "76%", height: "76%",
-      shape: "50%", blendMode: "normal", opacity: 0.40,
-      filter: "brightness(1.1) contrast(1.0)",
-    },
   },
   {
     id: 5,
@@ -72,11 +52,6 @@ const QUESTIONS = [
     emoji: "🩹",
     image: "/images/bandaid.png",
     faceTarget: "sender",
-    faceConfig: {
-      top: "28%", left: "28%", width: "42%", height: "42%",
-      shape: "8px", blendMode: "normal", opacity: 0.92,
-      filter: "brightness(1.0) contrast(1.05)", rotate: "-40deg",
-    },
   },
   {
     id: 6,
@@ -85,11 +60,6 @@ const QUESTIONS = [
     emoji: "📏",
     image: "/images/ruler.png",
     faceTarget: "sender",
-    faceConfig: {
-      top: "30%", left: "8%", width: "30%", height: "30%",
-      shape: "50%", blendMode: "normal", opacity: 0.95,
-      filter: "brightness(1.0) contrast(1.05)",
-    },
   },
   {
     id: 7,
@@ -98,11 +68,6 @@ const QUESTIONS = [
     emoji: "🍫",
     image: "/images/kitkat.png",
     faceTarget: "sender",
-    faceConfig: {
-      top: "22%", left: "15%", width: "70%", height: "38%",
-      shape: "4px", blendMode: "normal", opacity: 0.90,
-      filter: "brightness(1.05) contrast(1.05)",
-    },
   },
   {
     id: 8,
@@ -111,11 +76,6 @@ const QUESTIONS = [
     emoji: "🚗",
     image: "/images/steering.png",
     faceTarget: "sender",
-    faceConfig: {
-      top: "22%", left: "30%", width: "40%", height: "40%",
-      shape: "50%", blendMode: "normal", opacity: 0.95,
-      filter: "brightness(1.0) contrast(1.05)",
-    },
   },
   {
     id: 9,
@@ -124,11 +84,6 @@ const QUESTIONS = [
     emoji: "☀️",
     image: "/images/sun.png",
     faceTarget: "receiver",
-    faceConfig: {
-      top: "22%", left: "22%", width: "56%", height: "56%",
-      shape: "50%", blendMode: "normal", opacity: 0.90,
-      filter: "brightness(1.2) contrast(1.05)",
-    },
   },
   {
     id: 10,
@@ -137,11 +92,6 @@ const QUESTIONS = [
     emoji: "👻",
     image: "/images/ghost.png",
     faceTarget: "sender",
-    faceConfig: {
-      top: "14%", left: "18%", width: "62%", height: "58%",
-      shape: "50%", blendMode: "screen", opacity: 0.85,
-      filter: "brightness(1.3) contrast(1.1)", behindImage: true,
-    },
   },
 ];
 
@@ -223,7 +173,7 @@ function CloudIntro({ onReady, senderNickname }: { onReady: () => void; senderNi
           style={{ maxWidth: "280px" }}
         >
           <p className="text-gray-800 text-base font-bold text-center leading-snug">
-            🌷 These fresh TULIPS are for you 🌷
+            🌷 These are for you 🌷
           </p>
           <div
             className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0"
@@ -260,96 +210,79 @@ function CloudIntro({ onReady, senderNickname }: { onReady: () => void; senderNi
             <path d="M164 170 Q200 158 206 138" stroke="#C68642" strokeWidth="28" strokeLinecap="round" fill="none"/>
             <ellipse cx="82" cy="262" rx="22" ry="16" fill="#C68642"/>
             <ellipse cx="138" cy="262" rx="22" ry="16" fill="#C68642"/>
-
+            {/* BOUQUET WRAPPING */}
+            <path d="M-30 130 L60 130 L80 160 L90 155 L50 85 Z" fill="#FCE4EC" opacity="0.9"/>
+            <path d="M-30 130 L60 130 L80 160 L90 155 L50 85 Z" fill="none" stroke="#F48FB1" strokeWidth="1.5"/>
+            <path d="M50 85 L55 100" stroke="#E91E63" strokeWidth="3" strokeLinecap="round"/>
             {/* STEMS */}
-            <line x1="10"  y1="138" x2="-4"  y2="62" stroke="#2E7D32" strokeWidth="2.2" strokeLinecap="round"/>
-            <line x1="18"  y1="136" x2="10"  y2="50" stroke="#388E3C" strokeWidth="2.2" strokeLinecap="round"/>
-            <line x1="26"  y1="134" x2="24"  y2="38" stroke="#33691E" strokeWidth="2.5" strokeLinecap="round"/>
-            <line x1="34"  y1="132" x2="38"  y2="28" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round"/>
-            <line x1="42"  y1="132" x2="52"  y2="24" stroke="#388E3C" strokeWidth="2.5" strokeLinecap="round"/>
-            <line x1="50"  y1="134" x2="66"  y2="26" stroke="#33691E" strokeWidth="2.2" strokeLinecap="round"/>
-            <line x1="58"  y1="136" x2="80"  y2="32" stroke="#2E7D32" strokeWidth="2.2" strokeLinecap="round"/>
-
+            <line x1="-10" y1="130" x2="-18" y2="30" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="2" y1="130" x2="-4" y2="18" stroke="#388E3C" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="14" y1="128" x2="10" y2="10" stroke="#33691E" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="26" y1="126" x2="24" y2="6" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="36" y1="124" x2="36" y2="4" stroke="#33691E" strokeWidth="4" strokeLinecap="round"/>
+            <line x1="46" y1="122" x2="48" y2="2" stroke="#388E3C" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="56" y1="120" x2="60" y2="-2" stroke="#2E7D32" strokeWidth="4" strokeLinecap="round"/>
+            <line x1="66" y1="118" x2="72" y2="-4" stroke="#33691E" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="76" y1="116" x2="84" y2="-6" stroke="#388E3C" strokeWidth="4" strokeLinecap="round"/>
+            <line x1="86" y1="115" x2="96" y2="-5" stroke="#2E7D32" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="96" y1="115" x2="108" y2="-3" stroke="#33691E" strokeWidth="4" strokeLinecap="round"/>
+            <line x1="106" y1="116" x2="120" y2="0" stroke="#388E3C" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="116" y1="117" x2="130" y2="4" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="126" y1="120" x2="142" y2="10" stroke="#33691E" strokeWidth="3.5" strokeLinecap="round"/>
+            <line x1="134" y1="122" x2="152" y2="18" stroke="#388E3C" strokeWidth="3" strokeLinecap="round"/>
             {/* LEAVES */}
-            <path d="M16 108 Q4 92 8 76 Q20 90 16 108Z" fill="#43A047"/>
-            <path d="M22 104 Q34 88 30 72 Q18 86 22 104Z" fill="#388E3C"/>
-            <path d="M38 94 Q52 76 48 60 Q36 76 38 94Z" fill="#2E7D32"/>
-            <path d="M48 88 Q36 74 40 58 Q52 72 48 88Z" fill="#43A047" opacity="0.8"/>
-
-            {/* RIBBON */}
-            <path d="M4 138 Q34 133 62 138" fill="none" stroke="#E91E63" strokeWidth="5.5" strokeLinecap="round"/>
-            <path d="M5 141 Q34 136 61 141" fill="none" stroke="#C2185B" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/>
-            <path d="M26 135 Q14 120 7 125 Q1 130 12 136 Q20 139 26 135Z" fill="#F48FB1" stroke="#E91E63" strokeWidth="0.8"/>
-            <path d="M38 135 Q50 120 57 125 Q63 130 52 136 Q44 139 38 135Z" fill="#F48FB1" stroke="#E91E63" strokeWidth="0.8"/>
-            <ellipse cx="32" cy="136" rx="5" ry="4.5" fill="#E91E63" stroke="#C2185B" strokeWidth="0.8"/>
-            <path d="M28 139 Q22 150 18 160" fill="none" stroke="#E91E63" strokeWidth="2.2" strokeLinecap="round"/>
-            <path d="M36 139 Q42 150 44 161" fill="none" stroke="#E91E63" strokeWidth="2.2" strokeLinecap="round"/>
-            <path d="M18 160 L14 164 L22 163Z" fill="#E91E63"/>
-            <path d="M44 161 L48 165 L40 165Z" fill="#E91E63"/>
-
-            {/* TULIP 1 */}
-            <g transform="translate(-4, 62)">
-              <path d="M-3 2 Q0 -4 3 2" fill="#2E7D32"/>
-              <path d="M-6 0 Q-7 -10 0 -15 Q7 -10 6 0 Q3 4 0 4 Q-3 4 -6 0Z" fill="#AD1457"/>
-              <path d="M-6 0 Q-12 -8 -9 -16 Q-4 -12 -6 0Z" fill="#C2185B"/>
-              <path d="M6 0 Q12 -8 9 -16 Q4 -12 6 0Z" fill="#C2185B"/>
-              <ellipse cx="-1" cy="-10" rx="2" ry="4" fill="#FCE4EC" opacity="0.45"/>
-            </g>
-
-            {/* TULIP 2 */}
-            <g transform="translate(10, 50)">
-              <path d="M-3 2 Q0 -4 3 2" fill="#2E7D32"/>
-              <path d="M-6 0 Q-7 -11 0 -17 Q7 -11 6 0 Q3 4 0 4 Q-3 4 -6 0Z" fill="#E91E63"/>
-              <path d="M-6 0 Q-13 -9 -10 -18 Q-4 -13 -6 0Z" fill="#F06292"/>
-              <path d="M6 0 Q13 -9 10 -18 Q4 -13 6 0Z" fill="#F06292"/>
-              <ellipse cx="-1" cy="-11" rx="2" ry="4.5" fill="#FCE4EC" opacity="0.45"/>
-            </g>
-
-            {/* TULIP 3 */}
-            <g transform="translate(24, 38)">
-              <path d="M-3 2 Q0 -5 3 2" fill="#33691E"/>
-              <path d="M-7 0 Q-8 -12 0 -19 Q8 -12 7 0 Q4 5 0 5 Q-4 5 -7 0Z" fill="#D81B60"/>
-              <path d="M-7 0 Q-15 -10 -11 -20 Q-5 -14 -7 0Z" fill="#E91E63"/>
-              <path d="M7 0 Q15 -10 11 -20 Q5 -14 7 0Z" fill="#E91E63"/>
-              <ellipse cx="-1" cy="-12" rx="2.5" ry="5" fill="#FCE4EC" opacity="0.5"/>
-            </g>
-
-            {/* TULIP 4 - center tallest */}
-            <g transform="translate(38, 28)">
-              <path d="M-3 2 Q0 -5 3 2" fill="#2E7D32"/>
-              <path d="M-8 0 Q-9 -13 0 -21 Q9 -13 8 0 Q4 6 0 6 Q-4 6 -8 0Z" fill="#E91E63"/>
-              <path d="M-8 0 Q-17 -11 -13 -22 Q-5 -15 -8 0Z" fill="#EC407A"/>
-              <path d="M8 0 Q17 -11 13 -22 Q5 -15 8 0Z" fill="#EC407A"/>
-              <path d="M0 -4 Q1 -12 0 -20" fill="none" stroke="#C2185B" strokeWidth="0.6" opacity="0.5"/>
-              <ellipse cx="0" cy="-13" rx="3" ry="6" fill="#FCE4EC" opacity="0.4"/>
-            </g>
-
-            {/* TULIP 5 */}
-            <g transform="translate(52, 24)">
-              <path d="M-3 2 Q0 -5 3 2" fill="#33691E"/>
-              <path d="M-7 0 Q-8 -12 0 -19 Q8 -12 7 0 Q4 5 0 5 Q-4 5 -7 0Z" fill="#C2185B"/>
-              <path d="M-7 0 Q-15 -10 -11 -20 Q-5 -14 -7 0Z" fill="#D81B60"/>
-              <path d="M7 0 Q15 -10 11 -20 Q5 -14 7 0Z" fill="#D81B60"/>
-              <ellipse cx="-1" cy="-12" rx="2.5" ry="5" fill="#FCE4EC" opacity="0.5"/>
-            </g>
-
-            {/* TULIP 6 */}
-            <g transform="translate(66, 26)">
-              <path d="M-3 2 Q0 -4 3 2" fill="#388E3C"/>
-              <path d="M-6 0 Q-7 -11 0 -17 Q7 -11 6 0 Q3 4 0 4 Q-3 4 -6 0Z" fill="#EC407A"/>
-              <path d="M-6 0 Q-13 -9 -10 -18 Q-4 -13 -6 0Z" fill="#F06292"/>
-              <path d="M6 0 Q13 -9 10 -18 Q4 -13 6 0Z" fill="#F06292"/>
-              <ellipse cx="-1" cy="-11" rx="2" ry="4.5" fill="#FCE4EC" opacity="0.4"/>
-            </g>
-
-            {/* TULIP 7 */}
-            <g transform="translate(80, 32)">
-              <path d="M-3 2 Q0 -4 3 2" fill="#2E7D32"/>
-              <path d="M-6 0 Q-7 -10 0 -15 Q7 -10 6 0 Q3 4 0 4 Q-3 4 -6 0Z" fill="#AD1457"/>
-              <path d="M-6 0 Q-12 -8 -9 -16 Q-4 -12 -6 0Z" fill="#C2185B"/>
-              <path d="M6 0 Q12 -8 9 -16 Q4 -12 6 0Z" fill="#C2185B"/>
-              <ellipse cx="-1" cy="-10" rx="2" ry="4" fill="#FCE4EC" opacity="0.4"/>
-            </g>
+            <path d="M10 80 Q-4 66 -2 50 Q12 64 10 80Z" fill="#388E3C"/>
+            <path d="M8 78 Q22 62 20 46 Q6 60 8 78Z" fill="#43A047"/>
+            <path d="M32 72 Q18 56 22 40 Q36 56 32 72Z" fill="#2E7D32"/>
+            <path d="M50 65 Q64 48 60 32 Q46 50 50 65Z" fill="#388E3C"/>
+            <path d="M70 58 Q84 40 80 24 Q64 42 70 58Z" fill="#43A047"/>
+            <path d="M90 52 Q104 34 98 18 Q82 36 90 52Z" fill="#2E7D32"/>
+            <path d="M110 50 Q124 32 120 16 Q104 34 110 50Z" fill="#388E3C"/>
+            <path d="M126 54 Q140 38 136 22 Q120 38 126 54Z" fill="#43A047"/>
+            <path d="M18 90 Q4 76 6 60 Q20 76 18 90Z" fill="#388E3C" opacity="0.8"/>
+            <path d="M42 82 Q28 68 32 52 Q46 68 42 82Z" fill="#2E7D32" opacity="0.8"/>
+            {/* TULIPS - back row */}
+            <ellipse cx="-14" cy="22" rx="5" ry="8" fill="#880E4F" opacity="0.85"/>
+            <ellipse cx="0" cy="12" rx="6" ry="9" fill="#AD1457" opacity="0.85"/>
+            <ellipse cx="14" cy="4" rx="6" ry="10" fill="#C2185B" opacity="0.85"/>
+            <ellipse cx="28" cy="-2" rx="7" ry="10" fill="#E91E63" opacity="0.85"/>
+            <ellipse cx="42" cy="-4" rx="7" ry="11" fill="#D81B60" opacity="0.85"/>
+            <ellipse cx="56" cy="-5" rx="7" ry="11" fill="#EC407A" opacity="0.85"/>
+            <ellipse cx="70" cy="-4" rx="7" ry="10" fill="#F06292" opacity="0.85"/>
+            <ellipse cx="84" cy="-3" rx="7" ry="10" fill="#FF4081" opacity="0.85"/>
+            <ellipse cx="98" cy="-1" rx="7" ry="10" fill="#E91E63" opacity="0.85"/>
+            <ellipse cx="112" cy="2" rx="6" ry="9" fill="#C2185B" opacity="0.85"/>
+            <ellipse cx="126" cy="6" rx="6" ry="9" fill="#AD1457" opacity="0.85"/>
+            <ellipse cx="138" cy="12" rx="5" ry="8" fill="#880E4F" opacity="0.85"/>
+            <ellipse cx="148" cy="20" rx="5" ry="8" fill="#D81B60" opacity="0.85"/>
+            {/* TULIPS - mid row */}
+            <ellipse cx="-6" cy="28" rx="6" ry="10" fill="#E91E63"/>
+            <ellipse cx="10" cy="14" rx="7" ry="11" fill="#F06292"/>
+            <ellipse cx="26" cy="4" rx="7" ry="12" fill="#C2185B"/>
+            <ellipse cx="42" cy="-2" rx="8" ry="13" fill="#D81B60"/>
+            <ellipse cx="60" cy="-4" rx="8" ry="13" fill="#FF4081"/>
+            <ellipse cx="78" cy="-5" rx="8" ry="13" fill="#E91E63"/>
+            <ellipse cx="96" cy="-4" rx="8" ry="13" fill="#F48FB1"/>
+            <ellipse cx="114" cy="-2" rx="7" ry="12" fill="#EC407A"/>
+            <ellipse cx="130" cy="4" rx="7" ry="12" fill="#AD1457"/>
+            <ellipse cx="144" cy="14" rx="6" ry="11" fill="#C2185B"/>
+            {/* TULIPS - front row */}
+            <ellipse cx="4" cy="32" rx="7" ry="12" fill="#F48FB1"/>
+            <ellipse cx="22" cy="16" rx="8" ry="13" fill="#E91E63"/>
+            <ellipse cx="40" cy="4" rx="9" ry="14" fill="#D81B60"/>
+            <ellipse cx="58" cy="-2" rx="9" ry="15" fill="#C2185B"/>
+            <ellipse cx="78" cy="-5" rx="9" ry="15" fill="#FF4081"/>
+            <ellipse cx="98" cy="-4" rx="9" ry="14" fill="#E91E63"/>
+            <ellipse cx="116" cy="0" rx="8" ry="14" fill="#EC407A"/>
+            <ellipse cx="132" cy="10" rx="8" ry="13" fill="#F06292"/>
+            <ellipse cx="146" cy="22" rx="7" ry="12" fill="#AD1457"/>
+            {/* HIGHLIGHTS */}
+            <ellipse cx="40" cy="0" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
+            <ellipse cx="58" cy="-6" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
+            <ellipse cx="78" cy="-9" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
+            <ellipse cx="98" cy="-8" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
+            <ellipse cx="22" cy="12" rx="2.5" ry="5" fill="#FCE4EC" opacity="0.5"/>
+            <ellipse cx="116" cy="-4" rx="2.5" ry="5" fill="#FCE4EC" opacity="0.5"/>
           </svg>
         </motion.div>
       </motion.div>
@@ -390,7 +323,9 @@ function CloudIntro({ onReady, senderNickname }: { onReady: () => void; senderNi
           Are you ready? 👀
         </motion.h1>
         <p className="text-white/60 text-lg">
-          {senderNickname ? `${senderNickname} has something to show you…` : "Your partner has something to show you…"}
+          {senderNickname && senderNickname !== "babe"
+            ? `${senderNickname} has something to show you…`
+            : "Your partner has something to show you…"}
         </p>
       </motion.div>
 
@@ -412,17 +347,21 @@ function CloudIntro({ onReady, senderNickname }: { onReady: () => void; senderNi
   );
 }
 
-const SCENE_FACE_CONFIG: Record<string, { cx: number; cy: number; r: number; imgW: number; imgH: number; behindImage?: boolean; shape?: "circle" | "rect"; rectW?: number; rectH?: number; rotate?: number; faceOpacity?: number }> = {
+const SCENE_FACE_CONFIG: Record<string, {
+  cx: number; cy: number; r: number; imgW: number; imgH: number;
+  behindImage?: boolean; shape?: "circle" | "rect";
+  rectW?: number; rectH?: number; rotate?: number; faceOpacity?: number;
+}> = {
   sofa:      { cx: 274,  cy: 244,  r: 155, imgW: 1372, imgH: 872 },
-  astronaut: { cx: 1027, cy: 304,  r: 88,  imgW: 1334, imgH: 896 },
-  clock:     { cx: 415,  cy: 335,  r: 220, imgW: 831,  imgH: 1109, faceOpacity: 0.40 },
+  astronaut: { cx: 1020, cy: 298,  r: 82,  imgW: 1334, imgH: 896 },
+  clock:     { cx: 415,  cy: 335,  r: 220, imgW: 831,  imgH: 1109, faceOpacity: 0.65 },
   earth:     { cx: 640,  cy: 476,  r: 280, imgW: 1278, imgH: 952,  faceOpacity: 0.38 },
-  bandaid:   { cx: 530,  cy: 480,  r: 0,   imgW: 1112, imgH: 1049, shape: "rect", rectW: 320, rectH: 180, rotate: -40 },
+  bandaid:   { cx: 530,  cy: 480,  r: 0,   imgW: 1112, imgH: 1049, shape: "rect", rectW: 380, rectH: 200, rotate: 0 },
   ruler:     { cx: 220,  cy: 310,  r: 130, imgW: 1102, imgH: 868 },
   kitkat:    { cx: 460,  cy: 210,  r: 0,   imgW: 1028, imgH: 763,  shape: "rect", rectW: 560, rectH: 195, rotate: 0 },
   steering:  { cx: 640,  cy: 380,  r: 155, imgW: 1316, imgH: 908,  behindImage: true },
   sun:       { cx: 349,  cy: 340,  r: 160, imgW: 698,  imgH: 680 },
-  ghost:     { cx: 570,  cy: 420,  r: 210, imgW: 1232, imgH: 960,  behindImage: true, faceOpacity: 0.80 },
+  ghost:     { cx: 570,  cy: 380,  r: 190, imgW: 1232, imgH: 960,  behindImage: false, faceOpacity: 0.92 },
 };
 
 async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: string): Promise<string> {
@@ -525,38 +464,8 @@ async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: stri
   });
 }
 
-function ReactionBar({ slideId, onReact }: { slideId: number; onReact: (slideId: number, type: "heart" | "fire") => void }) {
-  const [reacted, setReacted] = useState<"heart" | "fire" | null>(null);
-  const handleReact = (type: "heart" | "fire") => {
-    if (reacted) return;
-    setReacted(type);
-    onReact(slideId, type);
-    if (navigator.vibrate) navigator.vibrate(40);
-  };
-  return (
-    <div className="flex items-center gap-3 mt-2">
-      <motion.button
-        whileTap={{ scale: 1.4 }}
-        onClick={() => handleReact("heart")}
-        className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium transition-all border ${reacted === "heart" ? "bg-pink-500/30 border-pink-400/60 text-pink-300" : "glass border-white/20 text-white/60 hover:text-pink-300"}`}
-      >
-        <Heart className={`w-4 h-4 ${reacted === "heart" ? "fill-pink-400 text-pink-400" : ""}`} />
-        {reacted === "heart" ? "Loved it!" : "❤️"}
-      </motion.button>
-      <motion.button
-        whileTap={{ scale: 1.4 }}
-        onClick={() => handleReact("fire")}
-        className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium transition-all border ${reacted === "fire" ? "bg-orange-500/30 border-orange-400/60 text-orange-300" : "glass border-white/20 text-white/60 hover:text-orange-300"}`}
-      >
-        <Flame className={`w-4 h-4 ${reacted === "fire" ? "fill-orange-400 text-orange-400" : ""}`} />
-        {reacted === "fire" ? "🔥 fire!" : "🔥"}
-      </motion.button>
-    </div>
-  );
-}
-
 function SlideCard({
-  question, senderUrl, receiverUrl, onNext, onPrev, onExit, index, total, senderNickname, onReact,
+  question, senderUrl, receiverUrl, onNext, onPrev, onExit, index, total, senderNickname,
 }: {
   question: typeof QUESTIONS[0];
   senderUrl: string | null;
@@ -567,7 +476,6 @@ function SlideCard({
   index: number;
   total: number;
   senderNickname?: string;
-  onReact: (slideId: number, type: "heart" | "fire") => void;
 }) {
   const faceUrl = question.faceTarget === "receiver" ? receiverUrl : senderUrl;
   const [compositeSrc, setCompositeSrc] = React.useState<string | null>(null);
@@ -580,6 +488,7 @@ function SlideCard({
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
   };
+
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null || touchStartY.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
@@ -598,12 +507,15 @@ function SlideCard({
     setCompositeSrc(null);
     const sceneName = question.image.replace("/images/", "").replace(".png", "");
     compositeOnCanvas(question.image, faceUrl, sceneName)
-      .then(dataUrl => { setCompositeSrc(dataUrl === "__css_fallback__" ? null : dataUrl); setLoading(false); })
+      .then(dataUrl => {
+        setCompositeSrc(dataUrl === "__css_fallback__" ? null : dataUrl);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, [question.id, faceUrl]);
 
   let revealText = question.revealText;
-  if (senderNickname) {
+  if (senderNickname && senderNickname !== "babe") {
     revealText = revealText.replace("Space....I see :)", `Space....I see :) — ${senderNickname}`);
   }
 
@@ -626,10 +538,19 @@ function SlideCard({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      {/* Progress bar with counter */}
       <div className="w-full flex items-center gap-2 mb-5">
-        {Array.from({ length: total }).map((_, i) => (
-          <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= index ? "bg-primary" : "bg-white/20"}`} />
-        ))}
+        <div className="flex items-center gap-2 flex-1">
+          {Array.from({ length: total }).map((_, i) => (
+            <div
+              key={i}
+              className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= index ? "bg-primary" : "bg-white/20"}`}
+            />
+          ))}
+        </div>
+        <span className="text-white/50 text-xs font-medium shrink-0">
+          {index + 1} / {total}
+        </span>
       </div>
 
       <motion.h2
@@ -649,9 +570,21 @@ function SlideCard({
         style={{ aspectRatio: "1" }}
       >
         {loading ? (
-          <div className="w-full h-full bg-white/5 animate-pulse flex items-center justify-center">
-            <div className="text-white/40 text-sm">Loading…</div>
-          </div>
+          <>
+            {/* Show bg image immediately while face composites */}
+            <img
+              src={question.image}
+              alt={question.question}
+              className="w-full h-full object-cover opacity-60"
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                className="w-8 h-8 rounded-full border-2 border-white/40 border-t-white"
+              />
+            </div>
+          </>
         ) : compositeSrc ? (
           <img src={compositeSrc} alt={question.question} className="w-full h-full object-cover" />
         ) : (
@@ -672,35 +605,44 @@ function SlideCard({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
-        className="text-white/80 text-base font-medium text-center mt-5 mb-3"
+        className="text-white/80 text-base font-medium text-center mt-5 mb-5"
       >
         {revealText}
       </motion.p>
-
-      <ReactionBar slideId={question.id} onReact={onReact} />
 
       {index === 0 && (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 0.6, 0] }}
           transition={{ delay: 1.5, duration: 2.5 }}
-          className="text-white/40 text-xs mt-2"
+          className="text-white/40 text-xs mb-3"
         >
           ← swipe to navigate →
         </motion.p>
       )}
 
-      <div className="flex items-center gap-4 w-full mt-4">
-        <Button variant="outline" onClick={onPrev} disabled={index === 0} className="flex-1 h-12 rounded-xl glass border-white/20 text-white disabled:opacity-30">
+      <div className="flex items-center gap-4 w-full mt-2">
+        <Button
+          variant="outline"
+          onClick={onPrev}
+          disabled={index === 0}
+          className="flex-1 h-12 rounded-xl glass border-white/20 text-white disabled:opacity-30"
+        >
           <ChevronLeft className="w-5 h-5 mr-1" />Prev
         </Button>
-        <Button onClick={onNext} className="flex-1 h-12 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold text-white">
+        <Button
+          onClick={onNext}
+          className="flex-1 h-12 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold text-white"
+        >
           {index === total - 1 ? "Done 🎉" : "Next"}
           {index < total - 1 && <ChevronRight className="w-5 h-5 ml-1" />}
         </Button>
       </div>
 
-      <button onClick={onExit} className="mt-4 text-white/40 hover:text-white/70 transition-colors text-sm flex items-center gap-1">
+      <button
+        onClick={onExit}
+        className="mt-4 text-white/40 hover:text-white/70 transition-colors text-sm flex items-center gap-1"
+      >
         <X className="w-3 h-3" />Exit
       </button>
     </motion.div>
@@ -713,7 +655,6 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState("");
   const [messageSent, setMessageSent] = useState(false);
-  const [reactions, setReactions] = useState<Record<number, "heart" | "fire">>({});
 
   const senderUrl = userData.selfieUrl;
   const receiverUrl = userData.partnerSelfieUrl;
@@ -746,19 +687,10 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
   };
 
   const handlePrev = () => {
-    if (currentIndex > 0) { setCurrentIndex((i) => i - 1); if (navigator.vibrate) navigator.vibrate(50); }
-  };
-
-  const handleReact = async (slideId: number, type: "heart" | "fire") => {
-    setReactions((prev) => ({ ...prev, [slideId]: type }));
-    try {
-      const token = (userData as any).token || userData.shareLink?.split("/share/")[1];
-      if (token) {
-        const existing = await supabase.from("meme_sessions").select("reactions").eq("token", token).single();
-        const prev = (existing?.data?.reactions as Record<string, string>) || {};
-        await supabase.from("meme_sessions").update({ reactions: { ...prev, [slideId]: type } }).eq("token", token);
-      }
-    } catch (e) { console.error(e); }
+    if (currentIndex > 0) {
+      setCurrentIndex((i) => i - 1);
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
   };
 
   const handleSendMessage = async () => {
@@ -766,7 +698,9 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
     stopAudio();
     try {
       const token = (userData as any).token || userData.shareLink?.split("/share/")[1];
-      if (token) await supabase.from("meme_sessions").update({ private_message: message }).eq("token", token);
+      if (token) {
+        await supabase.from("meme_sessions").update({ private_message: message }).eq("token", token);
+      }
     } catch (e) { console.error(e); }
     setMessageSent(true);
     setShowMessage(false);
@@ -777,12 +711,23 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
   return (
     <div className="relative min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center overflow-hidden">
       <AnimatePresence>
-        {phase === "intro" && <CloudIntro onReady={() => setPhase("slideshow")} senderNickname={senderNickname} />}
+        {phase === "intro" && (
+          <CloudIntro
+            onReady={() => setPhase("slideshow")}
+            senderNickname={senderNickname}
+          />
+        )}
       </AnimatePresence>
 
       <AnimatePresence mode="wait">
         {phase === "slideshow" && (
-          <motion.div key="slideshow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full flex flex-col items-center justify-center min-h-screen py-10">
+          <motion.div
+            key="slideshow"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="w-full flex flex-col items-center justify-center min-h-screen py-10"
+          >
             <AnimatePresence mode="wait">
               <SlideCard
                 key={currentIndex}
@@ -795,7 +740,6 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
                 index={currentIndex}
                 total={QUESTIONS.length}
                 senderNickname={senderNickname}
-                onReact={handleReact}
               />
             </AnimatePresence>
           </motion.div>
@@ -804,12 +748,25 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
 
       <AnimatePresence>
         {phase === "exit" && (
-          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="fixed inset-x-0 bottom-0 z-40 bg-background border-t border-border/40 rounded-t-3xl p-6 shadow-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-x-0 bottom-0 z-40 bg-background border-t border-border/40 rounded-t-3xl p-6 shadow-2xl"
+          >
             <div className="w-10 h-1 bg-border rounded-full mx-auto mb-5" />
             {messageSent ? (
               <div className="text-center space-y-4">
-                <p className="text-primary font-semibold text-lg">Message sent 🔒 Only they can see it</p>
-                <Button size="lg" onClick={() => handleExit()} className="w-full h-12 font-semibold bg-gradient-to-r from-primary to-secondary rounded-xl">Exit</Button>
+                <p className="text-primary font-semibold text-lg">
+                  Message sent 🔒 Only they can see it
+                </p>
+                <Button
+                  size="lg"
+                  onClick={handleExit}
+                  className="w-full h-12 font-semibold bg-gradient-to-r from-primary to-secondary rounded-xl"
+                >
+                  Exit
+                </Button>
               </div>
             ) : !showMessage ? (
               <>
@@ -817,10 +774,21 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
                   <Lock className="w-4 h-4 text-primary" />
                   <h2 className="font-bold text-lg">Before you go…</h2>
                 </div>
-                <p className="text-sm text-muted-foreground mb-5">Leave a private message for {userData.nickname || "them"}? Only they can see it 🔒</p>
+                <p className="text-sm text-muted-foreground mb-5">
+                  Leave a private message for {userData.nickname && userData.nickname !== "babe" ? userData.nickname : "them"}? Only they can see it 🔒
+                </p>
                 <div className="flex gap-3">
-                  <Button variant="outline" onClick={() => handleExit()} className="flex-1 h-11 rounded-xl border-border/50">Skip & Exit</Button>
-                  <Button onClick={handleShowMessage} className="flex-1 h-11 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold">
+                  <Button
+                    variant="outline"
+                    onClick={handleExit}
+                    className="flex-1 h-11 rounded-xl border-border/50"
+                  >
+                    Skip & Exit
+                  </Button>
+                  <Button
+                    onClick={handleShowMessage}
+                    className="flex-1 h-11 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold"
+                  >
                     <Lock className="w-4 h-4 mr-2" />Write message
                   </Button>
                 </div>
@@ -831,11 +799,29 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
                   <Lock className="w-4 h-4 text-primary" />
                   <h2 className="font-bold text-lg">Private message</h2>
                 </div>
-                <p className="text-sm text-muted-foreground mb-4">Only {userData.nickname || "they"} can see this 💬</p>
-                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type something honest... or chaotic 🔥" rows={4} className="w-full rounded-xl border border-border/60 bg-muted/40 p-3 text-sm resize-none focus:outline-none focus:border-primary/60 transition-colors" />
+                <p className="text-sm text-muted-foreground mb-4">
+                  Only {userData.nickname && userData.nickname !== "babe" ? userData.nickname : "they"} can see this 💬
+                </p>
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Type something honest... or chaotic 🔥"
+                  rows={4}
+                  className="w-full rounded-xl border border-border/60 bg-muted/40 p-3 text-sm resize-none focus:outline-none focus:border-primary/60 transition-colors"
+                />
                 <div className="flex gap-3 mt-3">
-                  <Button variant="outline" onClick={() => setShowMessage(false)} className="flex-1 h-11 rounded-xl border-border/50">Back</Button>
-                  <Button onClick={handleSendMessage} disabled={!message.trim()} className="flex-1 h-11 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowMessage(false)}
+                    className="flex-1 h-11 rounded-xl border-border/50"
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    onClick={handleSendMessage}
+                    disabled={!message.trim()}
+                    className="flex-1 h-11 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold"
+                  >
                     <Send className="w-4 h-4 mr-2" />Send
                   </Button>
                 </div>
