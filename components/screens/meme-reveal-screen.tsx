@@ -173,7 +173,7 @@ function CloudIntro({ onReady, senderNickname }: { onReady: () => void; senderNi
           style={{ maxWidth: "280px" }}
         >
           <p className="text-gray-800 text-base font-bold text-center leading-snug">
-            🌷 These are for you 🌷
+            🌷 These fresh TULIPS are for you 🌷
           </p>
           <div
             className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0"
@@ -210,79 +210,96 @@ function CloudIntro({ onReady, senderNickname }: { onReady: () => void; senderNi
             <path d="M164 170 Q200 158 206 138" stroke="#C68642" strokeWidth="28" strokeLinecap="round" fill="none"/>
             <ellipse cx="82" cy="262" rx="22" ry="16" fill="#C68642"/>
             <ellipse cx="138" cy="262" rx="22" ry="16" fill="#C68642"/>
-            {/* BOUQUET WRAPPING */}
-            <path d="M-30 130 L60 130 L80 160 L90 155 L50 85 Z" fill="#FCE4EC" opacity="0.9"/>
-            <path d="M-30 130 L60 130 L80 160 L90 155 L50 85 Z" fill="none" stroke="#F48FB1" strokeWidth="1.5"/>
-            <path d="M50 85 L55 100" stroke="#E91E63" strokeWidth="3" strokeLinecap="round"/>
+
             {/* STEMS */}
-            <line x1="-10" y1="130" x2="-18" y2="30" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
-            <line x1="2" y1="130" x2="-4" y2="18" stroke="#388E3C" strokeWidth="3" strokeLinecap="round"/>
-            <line x1="14" y1="128" x2="10" y2="10" stroke="#33691E" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="26" y1="126" x2="24" y2="6" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
-            <line x1="36" y1="124" x2="36" y2="4" stroke="#33691E" strokeWidth="4" strokeLinecap="round"/>
-            <line x1="46" y1="122" x2="48" y2="2" stroke="#388E3C" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="56" y1="120" x2="60" y2="-2" stroke="#2E7D32" strokeWidth="4" strokeLinecap="round"/>
-            <line x1="66" y1="118" x2="72" y2="-4" stroke="#33691E" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="76" y1="116" x2="84" y2="-6" stroke="#388E3C" strokeWidth="4" strokeLinecap="round"/>
-            <line x1="86" y1="115" x2="96" y2="-5" stroke="#2E7D32" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="96" y1="115" x2="108" y2="-3" stroke="#33691E" strokeWidth="4" strokeLinecap="round"/>
-            <line x1="106" y1="116" x2="120" y2="0" stroke="#388E3C" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="116" y1="117" x2="130" y2="4" stroke="#2E7D32" strokeWidth="3" strokeLinecap="round"/>
-            <line x1="126" y1="120" x2="142" y2="10" stroke="#33691E" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="134" y1="122" x2="152" y2="18" stroke="#388E3C" strokeWidth="3" strokeLinecap="round"/>
+            <line x1="10"  y1="138" x2="-4"  y2="62" stroke="#2E7D32" strokeWidth="2.2" strokeLinecap="round"/>
+            <line x1="18"  y1="136" x2="10"  y2="50" stroke="#388E3C" strokeWidth="2.2" strokeLinecap="round"/>
+            <line x1="26"  y1="134" x2="24"  y2="38" stroke="#33691E" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="34"  y1="132" x2="38"  y2="28" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="42"  y1="132" x2="52"  y2="24" stroke="#388E3C" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="50"  y1="134" x2="66"  y2="26" stroke="#33691E" strokeWidth="2.2" strokeLinecap="round"/>
+            <line x1="58"  y1="136" x2="80"  y2="32" stroke="#2E7D32" strokeWidth="2.2" strokeLinecap="round"/>
+
             {/* LEAVES */}
-            <path d="M10 80 Q-4 66 -2 50 Q12 64 10 80Z" fill="#388E3C"/>
-            <path d="M8 78 Q22 62 20 46 Q6 60 8 78Z" fill="#43A047"/>
-            <path d="M32 72 Q18 56 22 40 Q36 56 32 72Z" fill="#2E7D32"/>
-            <path d="M50 65 Q64 48 60 32 Q46 50 50 65Z" fill="#388E3C"/>
-            <path d="M70 58 Q84 40 80 24 Q64 42 70 58Z" fill="#43A047"/>
-            <path d="M90 52 Q104 34 98 18 Q82 36 90 52Z" fill="#2E7D32"/>
-            <path d="M110 50 Q124 32 120 16 Q104 34 110 50Z" fill="#388E3C"/>
-            <path d="M126 54 Q140 38 136 22 Q120 38 126 54Z" fill="#43A047"/>
-            <path d="M18 90 Q4 76 6 60 Q20 76 18 90Z" fill="#388E3C" opacity="0.8"/>
-            <path d="M42 82 Q28 68 32 52 Q46 68 42 82Z" fill="#2E7D32" opacity="0.8"/>
-            {/* TULIPS - back row */}
-            <ellipse cx="-14" cy="22" rx="5" ry="8" fill="#880E4F" opacity="0.85"/>
-            <ellipse cx="0" cy="12" rx="6" ry="9" fill="#AD1457" opacity="0.85"/>
-            <ellipse cx="14" cy="4" rx="6" ry="10" fill="#C2185B" opacity="0.85"/>
-            <ellipse cx="28" cy="-2" rx="7" ry="10" fill="#E91E63" opacity="0.85"/>
-            <ellipse cx="42" cy="-4" rx="7" ry="11" fill="#D81B60" opacity="0.85"/>
-            <ellipse cx="56" cy="-5" rx="7" ry="11" fill="#EC407A" opacity="0.85"/>
-            <ellipse cx="70" cy="-4" rx="7" ry="10" fill="#F06292" opacity="0.85"/>
-            <ellipse cx="84" cy="-3" rx="7" ry="10" fill="#FF4081" opacity="0.85"/>
-            <ellipse cx="98" cy="-1" rx="7" ry="10" fill="#E91E63" opacity="0.85"/>
-            <ellipse cx="112" cy="2" rx="6" ry="9" fill="#C2185B" opacity="0.85"/>
-            <ellipse cx="126" cy="6" rx="6" ry="9" fill="#AD1457" opacity="0.85"/>
-            <ellipse cx="138" cy="12" rx="5" ry="8" fill="#880E4F" opacity="0.85"/>
-            <ellipse cx="148" cy="20" rx="5" ry="8" fill="#D81B60" opacity="0.85"/>
-            {/* TULIPS - mid row */}
-            <ellipse cx="-6" cy="28" rx="6" ry="10" fill="#E91E63"/>
-            <ellipse cx="10" cy="14" rx="7" ry="11" fill="#F06292"/>
-            <ellipse cx="26" cy="4" rx="7" ry="12" fill="#C2185B"/>
-            <ellipse cx="42" cy="-2" rx="8" ry="13" fill="#D81B60"/>
-            <ellipse cx="60" cy="-4" rx="8" ry="13" fill="#FF4081"/>
-            <ellipse cx="78" cy="-5" rx="8" ry="13" fill="#E91E63"/>
-            <ellipse cx="96" cy="-4" rx="8" ry="13" fill="#F48FB1"/>
-            <ellipse cx="114" cy="-2" rx="7" ry="12" fill="#EC407A"/>
-            <ellipse cx="130" cy="4" rx="7" ry="12" fill="#AD1457"/>
-            <ellipse cx="144" cy="14" rx="6" ry="11" fill="#C2185B"/>
-            {/* TULIPS - front row */}
-            <ellipse cx="4" cy="32" rx="7" ry="12" fill="#F48FB1"/>
-            <ellipse cx="22" cy="16" rx="8" ry="13" fill="#E91E63"/>
-            <ellipse cx="40" cy="4" rx="9" ry="14" fill="#D81B60"/>
-            <ellipse cx="58" cy="-2" rx="9" ry="15" fill="#C2185B"/>
-            <ellipse cx="78" cy="-5" rx="9" ry="15" fill="#FF4081"/>
-            <ellipse cx="98" cy="-4" rx="9" ry="14" fill="#E91E63"/>
-            <ellipse cx="116" cy="0" rx="8" ry="14" fill="#EC407A"/>
-            <ellipse cx="132" cy="10" rx="8" ry="13" fill="#F06292"/>
-            <ellipse cx="146" cy="22" rx="7" ry="12" fill="#AD1457"/>
-            {/* HIGHLIGHTS */}
-            <ellipse cx="40" cy="0" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
-            <ellipse cx="58" cy="-6" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
-            <ellipse cx="78" cy="-9" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
-            <ellipse cx="98" cy="-8" rx="3" ry="6" fill="#FCE4EC" opacity="0.6"/>
-            <ellipse cx="22" cy="12" rx="2.5" ry="5" fill="#FCE4EC" opacity="0.5"/>
-            <ellipse cx="116" cy="-4" rx="2.5" ry="5" fill="#FCE4EC" opacity="0.5"/>
+            <path d="M16 108 Q4 92 8 76 Q20 90 16 108Z" fill="#43A047"/>
+            <path d="M22 104 Q34 88 30 72 Q18 86 22 104Z" fill="#388E3C"/>
+            <path d="M38 94 Q52 76 48 60 Q36 76 38 94Z" fill="#2E7D32"/>
+            <path d="M48 88 Q36 74 40 58 Q52 72 48 88Z" fill="#43A047" opacity="0.8"/>
+
+            {/* RIBBON */}
+            <path d="M4 138 Q34 133 62 138" fill="none" stroke="#E91E63" strokeWidth="5.5" strokeLinecap="round"/>
+            <path d="M5 141 Q34 136 61 141" fill="none" stroke="#C2185B" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/>
+            <path d="M26 135 Q14 120 7 125 Q1 130 12 136 Q20 139 26 135Z" fill="#F48FB1" stroke="#E91E63" strokeWidth="0.8"/>
+            <path d="M38 135 Q50 120 57 125 Q63 130 52 136 Q44 139 38 135Z" fill="#F48FB1" stroke="#E91E63" strokeWidth="0.8"/>
+            <ellipse cx="32" cy="136" rx="5" ry="4.5" fill="#E91E63" stroke="#C2185B" strokeWidth="0.8"/>
+            <path d="M28 139 Q22 150 18 160" fill="none" stroke="#E91E63" strokeWidth="2.2" strokeLinecap="round"/>
+            <path d="M36 139 Q42 150 44 161" fill="none" stroke="#E91E63" strokeWidth="2.2" strokeLinecap="round"/>
+            <path d="M18 160 L14 164 L22 163Z" fill="#E91E63"/>
+            <path d="M44 161 L48 165 L40 165Z" fill="#E91E63"/>
+
+            {/* TULIP 1 */}
+            <g transform="translate(-4, 62)">
+              <path d="M-3 2 Q0 -4 3 2" fill="#2E7D32"/>
+              <path d="M-6 0 Q-7 -10 0 -15 Q7 -10 6 0 Q3 4 0 4 Q-3 4 -6 0Z" fill="#AD1457"/>
+              <path d="M-6 0 Q-12 -8 -9 -16 Q-4 -12 -6 0Z" fill="#C2185B"/>
+              <path d="M6 0 Q12 -8 9 -16 Q4 -12 6 0Z" fill="#C2185B"/>
+              <ellipse cx="-1" cy="-10" rx="2" ry="4" fill="#FCE4EC" opacity="0.45"/>
+            </g>
+
+            {/* TULIP 2 */}
+            <g transform="translate(10, 50)">
+              <path d="M-3 2 Q0 -4 3 2" fill="#2E7D32"/>
+              <path d="M-6 0 Q-7 -11 0 -17 Q7 -11 6 0 Q3 4 0 4 Q-3 4 -6 0Z" fill="#E91E63"/>
+              <path d="M-6 0 Q-13 -9 -10 -18 Q-4 -13 -6 0Z" fill="#F06292"/>
+              <path d="M6 0 Q13 -9 10 -18 Q4 -13 6 0Z" fill="#F06292"/>
+              <ellipse cx="-1" cy="-11" rx="2" ry="4.5" fill="#FCE4EC" opacity="0.45"/>
+            </g>
+
+            {/* TULIP 3 */}
+            <g transform="translate(24, 38)">
+              <path d="M-3 2 Q0 -5 3 2" fill="#33691E"/>
+              <path d="M-7 0 Q-8 -12 0 -19 Q8 -12 7 0 Q4 5 0 5 Q-4 5 -7 0Z" fill="#D81B60"/>
+              <path d="M-7 0 Q-15 -10 -11 -20 Q-5 -14 -7 0Z" fill="#E91E63"/>
+              <path d="M7 0 Q15 -10 11 -20 Q5 -14 7 0Z" fill="#E91E63"/>
+              <ellipse cx="-1" cy="-12" rx="2.5" ry="5" fill="#FCE4EC" opacity="0.5"/>
+            </g>
+
+            {/* TULIP 4 - center tallest */}
+            <g transform="translate(38, 28)">
+              <path d="M-3 2 Q0 -5 3 2" fill="#2E7D32"/>
+              <path d="M-8 0 Q-9 -13 0 -21 Q9 -13 8 0 Q4 6 0 6 Q-4 6 -8 0Z" fill="#E91E63"/>
+              <path d="M-8 0 Q-17 -11 -13 -22 Q-5 -15 -8 0Z" fill="#EC407A"/>
+              <path d="M8 0 Q17 -11 13 -22 Q5 -15 8 0Z" fill="#EC407A"/>
+              <path d="M0 -4 Q1 -12 0 -20" fill="none" stroke="#C2185B" strokeWidth="0.6" opacity="0.5"/>
+              <ellipse cx="0" cy="-13" rx="3" ry="6" fill="#FCE4EC" opacity="0.4"/>
+            </g>
+
+            {/* TULIP 5 */}
+            <g transform="translate(52, 24)">
+              <path d="M-3 2 Q0 -5 3 2" fill="#33691E"/>
+              <path d="M-7 0 Q-8 -12 0 -19 Q8 -12 7 0 Q4 5 0 5 Q-4 5 -7 0Z" fill="#C2185B"/>
+              <path d="M-7 0 Q-15 -10 -11 -20 Q-5 -14 -7 0Z" fill="#D81B60"/>
+              <path d="M7 0 Q15 -10 11 -20 Q5 -14 7 0Z" fill="#D81B60"/>
+              <ellipse cx="-1" cy="-12" rx="2.5" ry="5" fill="#FCE4EC" opacity="0.5"/>
+            </g>
+
+            {/* TULIP 6 */}
+            <g transform="translate(66, 26)">
+              <path d="M-3 2 Q0 -4 3 2" fill="#388E3C"/>
+              <path d="M-6 0 Q-7 -11 0 -17 Q7 -11 6 0 Q3 4 0 4 Q-3 4 -6 0Z" fill="#EC407A"/>
+              <path d="M-6 0 Q-13 -9 -10 -18 Q-4 -13 -6 0Z" fill="#F06292"/>
+              <path d="M6 0 Q13 -9 10 -18 Q4 -13 6 0Z" fill="#F06292"/>
+              <ellipse cx="-1" cy="-11" rx="2" ry="4.5" fill="#FCE4EC" opacity="0.4"/>
+            </g>
+
+            {/* TULIP 7 */}
+            <g transform="translate(80, 32)">
+              <path d="M-3 2 Q0 -4 3 2" fill="#2E7D32"/>
+              <path d="M-6 0 Q-7 -10 0 -15 Q7 -10 6 0 Q3 4 0 4 Q-3 4 -6 0Z" fill="#AD1457"/>
+              <path d="M-6 0 Q-12 -8 -9 -16 Q-4 -12 -6 0Z" fill="#C2185B"/>
+              <path d="M6 0 Q12 -8 9 -16 Q4 -12 6 0Z" fill="#C2185B"/>
+              <ellipse cx="-1" cy="-10" rx="2" ry="4" fill="#FCE4EC" opacity="0.4"/>
+            </g>
           </svg>
         </motion.div>
       </motion.div>
@@ -352,15 +369,25 @@ const SCENE_FACE_CONFIG: Record<string, {
   behindImage?: boolean; shape?: "circle" | "rect";
   rectW?: number; rectH?: number; rotate?: number; faceOpacity?: number;
 }> = {
+  // sofa: face in bottom-left cushion area
   sofa:      { cx: 274,  cy: 244,  r: 155, imgW: 1372, imgH: 872 },
+  // astronaut: helmet visor top-right
   astronaut: { cx: 1020, cy: 298,  r: 82,  imgW: 1334, imgH: 896 },
+  // clock: face on clock face, nicely visible
   clock:     { cx: 415,  cy: 335,  r: 220, imgW: 831,  imgH: 1109, faceOpacity: 0.65 },
-  earth:     { cx: 640,  cy: 476,  r: 280, imgW: 1278, imgH: 952,  faceOpacity: 0.38 },
-  bandaid:   { cx: 530,  cy: 480,  r: 0,   imgW: 1112, imgH: 1049, shape: "rect", rectW: 380, rectH: 200, rotate: 0 },
+  // earth: face on earth, darker so it's visible
+  earth:     { cx: 640,  cy: 476,  r: 280, imgW: 1278, imgH: 952,  faceOpacity: 0.55 },
+  // bandaid: centered ON the bandaid pad (the beige square in the middle), slight tilt
+  bandaid:   { cx: 556,  cy: 524,  r: 0,   imgW: 1112, imgH: 1049, shape: "rect", rectW: 280, rectH: 280, rotate: -40, faceOpacity: 0.95 },
+  // ruler: face on left side
   ruler:     { cx: 220,  cy: 310,  r: 130, imgW: 1102, imgH: 868 },
-  kitkat:    { cx: 460,  cy: 210,  r: 0,   imgW: 1028, imgH: 763,  shape: "rect", rectW: 560, rectH: 195, rotate: 0 },
-  steering:  { cx: 640,  cy: 380,  r: 155, imgW: 1316, imgH: 908,  behindImage: true },
+  // kitkat: smaller rect, lower, faded so chocolate shows through
+  kitkat:    { cx: 460,  cy: 310,  r: 0,   imgW: 1028, imgH: 763,  shape: "rect", rectW: 340, rectH: 220, rotate: 0, faceOpacity: 0.55 },
+  // steering: circle above the Porsche logo — NOT behind image so it's always visible
+  steering:  { cx: 658,  cy: 290,  r: 110, imgW: 1316, imgH: 908,  behindImage: false, faceOpacity: 0.92 },
+  // sun: face inside sun circle
   sun:       { cx: 349,  cy: 340,  r: 160, imgW: 698,  imgH: 680 },
+  // ghost: face visible on ghost body
   ghost:     { cx: 570,  cy: 380,  r: 190, imgW: 1232, imgH: 960,  behindImage: false, faceOpacity: 0.92 },
 };
 
@@ -395,6 +422,7 @@ async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: stri
         const faceAlpha = config.faceOpacity ?? 0.92;
 
         if (config.behindImage) {
+          // Draw face first, then bg on top
           ctx.save();
           ctx.beginPath();
           const faceR = config.r * scale;
@@ -410,12 +438,13 @@ async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: stri
           ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
           ctx.globalAlpha = 1;
         } else if (config.shape === "rect") {
-          const rw = (config.rectW || 200) * scale;
-          const rh = (config.rectH || 200) * scale;
+          // Draw bg first, then face rect on top
           ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
           ctx.save();
           ctx.translate(faceCX, faceCY);
           if (config.rotate) ctx.rotate((config.rotate * Math.PI) / 180);
+          const rw = (config.rectW || 200) * scale;
+          const rh = (config.rectH || 200) * scale;
           ctx.beginPath();
           ctx.rect(-rw / 2, -rh / 2, rw, rh);
           ctx.clip();
@@ -425,7 +454,9 @@ async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: stri
           ctx.globalAlpha = faceAlpha;
           ctx.drawImage(faceImg, -fdw / 2, -fdh / 2, fdw, fdh);
           ctx.restore();
+          ctx.globalAlpha = 1;
         } else {
+          // Draw bg first, then circle face on top
           const faceR = config.r * scale;
           ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
           ctx.save();
@@ -447,8 +478,7 @@ async function compositeOnCanvas(bgSrc: string, faceSrc: string, sceneName: stri
         }
 
         ctx.globalAlpha = 1;
-        const result = canvas.toDataURL("image/jpeg", 0.92);
-        resolve(result);
+        resolve(canvas.toDataURL("image/jpeg", 0.92));
       } catch {
         resolve("__css_fallback__");
       }
@@ -538,7 +568,7 @@ function SlideCard({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Progress bar with counter */}
+      {/* Progress bar + counter */}
       <div className="w-full flex items-center gap-2 mb-5">
         <div className="flex items-center gap-2 flex-1">
           {Array.from({ length: total }).map((_, i) => (
@@ -548,9 +578,7 @@ function SlideCard({
             />
           ))}
         </div>
-        <span className="text-white/50 text-xs font-medium shrink-0">
-          {index + 1} / {total}
-        </span>
+        <span className="text-white/50 text-xs font-medium shrink-0">{index + 1} / {total}</span>
       </div>
 
       <motion.h2
@@ -571,12 +599,7 @@ function SlideCard({
       >
         {loading ? (
           <>
-            {/* Show bg image immediately while face composites */}
-            <img
-              src={question.image}
-              alt={question.question}
-              className="w-full h-full object-cover opacity-60"
-            />
+            <img src={question.image} alt="" className="w-full h-full object-cover opacity-50" />
             <div className="absolute inset-0 flex items-center justify-center">
               <motion.div
                 animate={{ rotate: 360 }}
@@ -712,10 +735,7 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
     <div className="relative min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center overflow-hidden">
       <AnimatePresence>
         {phase === "intro" && (
-          <CloudIntro
-            onReady={() => setPhase("slideshow")}
-            senderNickname={senderNickname}
-          />
+          <CloudIntro onReady={() => setPhase("slideshow")} senderNickname={senderNickname} />
         )}
       </AnimatePresence>
 
@@ -757,16 +777,8 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
             <div className="w-10 h-1 bg-border rounded-full mx-auto mb-5" />
             {messageSent ? (
               <div className="text-center space-y-4">
-                <p className="text-primary font-semibold text-lg">
-                  Message sent 🔒 Only they can see it
-                </p>
-                <Button
-                  size="lg"
-                  onClick={handleExit}
-                  className="w-full h-12 font-semibold bg-gradient-to-r from-primary to-secondary rounded-xl"
-                >
-                  Exit
-                </Button>
+                <p className="text-primary font-semibold text-lg">Message sent 🔒 Only they can see it</p>
+                <Button size="lg" onClick={handleExit} className="w-full h-12 font-semibold bg-gradient-to-r from-primary to-secondary rounded-xl">Exit</Button>
               </div>
             ) : !showMessage ? (
               <>
@@ -775,20 +787,11 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
                   <h2 className="font-bold text-lg">Before you go…</h2>
                 </div>
                 <p className="text-sm text-muted-foreground mb-5">
-                  Leave a private message for {userData.nickname && userData.nickname !== "babe" ? userData.nickname : "them"}? Only they can see it 🔒
+                  Leave a private message for {senderNickname && senderNickname !== "babe" ? senderNickname : "them"}? Only they can see it 🔒
                 </p>
                 <div className="flex gap-3">
-                  <Button
-                    variant="outline"
-                    onClick={handleExit}
-                    className="flex-1 h-11 rounded-xl border-border/50"
-                  >
-                    Skip & Exit
-                  </Button>
-                  <Button
-                    onClick={handleShowMessage}
-                    className="flex-1 h-11 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold"
-                  >
+                  <Button variant="outline" onClick={handleExit} className="flex-1 h-11 rounded-xl border-border/50">Skip & Exit</Button>
+                  <Button onClick={handleShowMessage} className="flex-1 h-11 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold">
                     <Lock className="w-4 h-4 mr-2" />Write message
                   </Button>
                 </div>
@@ -800,7 +803,7 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
                   <h2 className="font-bold text-lg">Private message</h2>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Only {userData.nickname && userData.nickname !== "babe" ? userData.nickname : "they"} can see this 💬
+                  Only {senderNickname && senderNickname !== "babe" ? senderNickname : "they"} can see this 💬
                 </p>
                 <textarea
                   value={message}
@@ -810,18 +813,8 @@ export default function MemeRevealScreen({ userData, onNavigate }: MemeRevealScr
                   className="w-full rounded-xl border border-border/60 bg-muted/40 p-3 text-sm resize-none focus:outline-none focus:border-primary/60 transition-colors"
                 />
                 <div className="flex gap-3 mt-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowMessage(false)}
-                    className="flex-1 h-11 rounded-xl border-border/50"
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    onClick={handleSendMessage}
-                    disabled={!message.trim()}
-                    className="flex-1 h-11 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold"
-                  >
+                  <Button variant="outline" onClick={() => setShowMessage(false)} className="flex-1 h-11 rounded-xl border-border/50">Back</Button>
+                  <Button onClick={handleSendMessage} disabled={!message.trim()} className="flex-1 h-11 rounded-xl bg-gradient-to-r from-primary to-secondary font-semibold">
                     <Send className="w-4 h-4 mr-2" />Send
                   </Button>
                 </div>
