@@ -8,7 +8,7 @@ import type { AppScreen, UserData } from "@/app/page";
 import { supabase } from "@/lib/supabase";
 
 interface MemeRevealScreenProps {
-  userData: UserData;https://github.com/sshriish/instagram_couple_trend/edit/main/components/screens/meme-reveal-screen.tsx
+  userData: UserData;
   onNavigate: (screen: AppScreen) => void;
 }
 
