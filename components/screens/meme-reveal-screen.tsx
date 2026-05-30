@@ -424,14 +424,10 @@ const SCENE_FACE_CONFIG: Record
   sofa:      { cx: 274, cy: 244, r: 155, imgW: 1372, imgH: 872 },
   astronaut: { cx: 1020, cy: 298, r: 82, imgW: 1334, imgH: 896 },
   clock:     { cx: 415, cy: 335, r: 220, imgW: 831, imgH: 1109, faceOpacity: 0.65 },
-  // earth: raised opacity so face is darker and more visible
   earth:     { cx: 640, cy: 476, r: 280, imgW: 1278, imgH: 952, faceOpacity: 0.55 },
-  // bandaid: centered on the pad square, tilted -40deg to match bandaid angle
   bandaid:   { cx: 556, cy: 524, r: 0, imgW: 1112, imgH: 1049, shape: "rect", rectW: 280, rectH: 280, rotate: -40, faceOpacity: 0.95 },
   ruler:     { cx: 220, cy: 310, r: 130, imgW: 1102, imgH: 868 },
-  // kitkat: smaller, lower, faded so chocolate bars show through
   kitkat:    { cx: 460, cy: 310, r: 0, imgW: 1028, imgH: 763, shape: "rect", rectW: 340, rectH: 220, rotate: 0, faceOpacity: 0.55 },
-  // steering: NOT behind image, circle above the logo, always visible
   steering:  { cx: 658, cy: 290, r: 110, imgW: 1316, imgH: 908, behindImage: false, faceOpacity: 0.92 },
   sun:       { cx: 349, cy: 340, r: 160, imgW: 698, imgH: 680 },
   ghost:     { cx: 570, cy: 380, r: 190, imgW: 1232, imgH: 960, behindImage: false, faceOpacity: 0.92 },
@@ -640,7 +636,6 @@ function SlideCard({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Progress bar + counter */}
       <div className="w-full flex items-center gap-2 mb-5">
         <div className="flex items-center gap-1 flex-1">
           {Array.from({ length: total }).map((_, i) => (
@@ -666,7 +661,6 @@ function SlideCard({
         {question.question}
       </motion.h2>
 
-      {/* Square image card — responsive on both mobile and desktop */}
       <motion.div
         initial={{ scale: 0.85, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -869,7 +863,6 @@ export default function MemeRevealScreen({
             exit={{ opacity: 0 }}
             className="w-full flex flex-col items-center justify-center min-h-screen py-8 px-2"
           >
-            {/* Constrain width on desktop so it looks good on large screens */}
             <div className="w-full max-w-sm mx-auto">
               <AnimatePresence mode="wait">
                 <SlideCard
@@ -990,4 +983,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-                  }
+                      }
