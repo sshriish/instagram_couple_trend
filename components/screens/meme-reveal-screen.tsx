@@ -8,7 +8,7 @@ import type { AppScreen, UserData } from "@/app/page";
 import { supabase } from "@/lib/supabase";
 
 interface MemeRevealScreenProps {
-  userData: UserData;
+  userData: UserData;https://github.com/sshriish/instagram_couple_trend/edit/main/components/screens/meme-reveal-screen.tsx
   onNavigate: (screen: AppScreen) => void;
 }
 
@@ -405,7 +405,7 @@ function CloudIntro({
   );
 }
 
-const SCENE_FACE_CONFIG: Record
+const SCENE_FACE_CONFIG: Record<
   string,
   {
     cx: number;
@@ -983,4 +983,4 @@ export default function MemeRevealScreen({
       </AnimatePresence>
     </div>
   );
-                      }
+}
