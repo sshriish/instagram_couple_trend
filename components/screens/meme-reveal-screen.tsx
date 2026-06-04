@@ -93,6 +93,30 @@ const QUESTIONS = [
     image: "/images/ghost.png",
     faceTarget: "sender",
   },
+  {
+    id: 11,
+    question: "I don't feel the spark between us.",
+    revealText: "There you go miss",
+    emoji: "✨",
+    image: "/images/spark.png",
+    faceTarget: "sender",
+  },
+  {
+    id: 12,
+    question: "I don't see our relationship having a future.",
+    revealText: "Gurl....Use this",
+    emoji: "👓",
+    image: "/images/specs.png",
+    faceTarget: "sender",
+  },
+  {
+    id: 13,
+    question: "We should go our separate ways!!",
+    revealText: "Is that so ?",
+    emoji: "🗺️📍",
+    image: "/images/circle.png",
+    faceTarget: "sender",
+  },
 ];
 
 function CloudIntro({
@@ -431,6 +455,9 @@ const SCENE_FACE_CONFIG: Record<
   steering:  { cx: 658, cy: 290, r: 110, imgW: 1316, imgH: 908, behindImage: false, faceOpacity: 0.92 },
   sun:       { cx: 349, cy: 340, r: 160, imgW: 698, imgH: 680 },
   ghost:     { cx: 570, cy: 380, r: 190, imgW: 1232, imgH: 960, behindImage: false, faceOpacity: 0.92 },
+  spark:     { cx: 306, cy: 220, r: 70, imgW: 612,imgH: 410},
+  specs:     { cx: 300, cy: 168, shape: "rect", rectW: 420, rectH: 120, imgW: 600, imgH: 337, rotate: 0},
+  cicle:     { cx: 306, cy: 230, r: 150, imgW: 612, imgH: 459 ,behindImage: false, faceOpacity: 1},
 };
 
 async function compositeOnCanvas(
