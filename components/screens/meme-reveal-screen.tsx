@@ -456,8 +456,8 @@ const SCENE_FACE_CONFIG: Record<
   sun:       { cx: 349, cy: 340, r: 160, imgW: 698, imgH: 680 },
   ghost:     { cx: 570, cy: 380, r: 190, imgW: 1232, imgH: 960, behindImage: false, faceOpacity: 0.92 },
   spark:     { cx: 306, cy: 220, r: 70, imgW: 612,imgH: 410},
-  specs:     { cx: 300, cy: 168, shape: "rect", rectW: 420, rectH: 120, imgW: 600, imgH: 337, rotate: 0},
-  cicle:     { cx: 306, cy: 230, r: 150, imgW: 612, imgH: 459 ,behindImage: false, faceOpacity: 1},
+  specs:     { cx: 300, cy: 176, r: 0, imgW: 600, imgH: 337, shape: "rect", rectW: 250, rectH: 120, rotate: 0, faceOpacity: 1},
+ circle:     { cx: 306, cy: 230, r: 92, imgW: 612, imgH: 459, behindImage: false, faceOpacity: 1},
 };
 
 async function compositeOnCanvas(
