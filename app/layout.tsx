@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LITERALLY ME | Turn Your Face Into Emotional Damage",
+  title: "MemeUs| Turn Your Face Into Emotional Damage",
   description:
     "Create viral relationship memes with your face. Send your partner a link and watch them react to seeing you as a clock, astronaut, chair, and more.",
   generator: "v0.app",
@@ -27,14 +27,14 @@ export const metadata: Metadata = {
     "tiktok trend",
   ],
   openGraph: {
-    title: "LITERALLY ME | Turn Your Face Into Emotional Damage",
+    title: "MemeUs | Turn Your Face Into Emotional Damage",
     description:
       "Someone turned themselves into memes for you. Upload a selfie to unlock the chaos.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LITERALLY ME | Turn Your Face Into Emotional Damage",
+    title: "MemeUs| Turn Your Face Into Emotional Damage",
     description:
       "Someone turned themselves into memes for you. Upload a selfie to unlock the chaos.",
   },
