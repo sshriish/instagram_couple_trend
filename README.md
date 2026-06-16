@@ -18,23 +18,6 @@
 
 ---
 
-## 🎭 Meme Lineup
-
-| | Meme | Prompt | Punchline |
-|--|------|--------|-----------|
-| 🪑 | Sofa | "You can't stand me?" | "Okay.... there you go sit on me 🫦" |
-| 🚀 | Astronaut | "You need space?" | "Space....I see :)" |
-| ⏰ | Clock | "You need time?" | "take your time." |
-| 🌍 | Earth | "You are my world?" | "you're literally my world !!!" |
-| 🩹 | Bandaid | "You need to heal?" | "take your time princess and i am sorry" |
-| 📏 | Ruler | "You want distance?" | "Measured. Confirmed. Noted 📏" |
-| 🍫 | KitKat | "You need a break?" | "fine :(" |
-| 🚗 | Steering Wheel | "I drive you crazy?" | "congrats you won" |
-| ☀️ | Sun | "You're my sunshine?" | *(revealed on play)* |
-| 👻 | Ghost | "You ghosted me?" | *(revealed on play)* |
-
----
-
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
