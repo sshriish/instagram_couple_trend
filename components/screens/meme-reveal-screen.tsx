@@ -449,27 +449,20 @@ type SceneConfig = {
 
 const SCENE_FACE_CONFIG: Record<string, SceneConfig> = {
   sofa:      { imgW: 1372, imgH: 872,  placements: [{ cx: 274,  cy: 244, r: 155 }] },
-  // Astronaut: face on the helmet visor (dark oval, top-right area of image)
-  astronaut: { imgW: 1334, imgH: 896,  placements: [{ cx: 900, cy: 225, r: 62, faceOpacity: 0.80 }] },
+  astronaut: { imgW: 1334, imgH: 896,  placements: [{ cx: 1038, cy: 278, r: 68, faceOpacity: 0.88 }] },
   clock:     { imgW: 831,  imgH: 1109, placements: [{ cx: 415,  cy: 335, r: 220, faceOpacity: 0.65 }] },
   earth:     { imgW: 1278, imgH: 952,  placements: [{ cx: 640,  cy: 476, r: 280, faceOpacity: 0.55 }] },
   bandaid:   { imgW: 1112, imgH: 1049, placements: [{ cx: 556,  cy: 524, r: 0, shape: "rect", rectW: 280, rectH: 280, rotate: -40, faceOpacity: 0.95 }] },
   ruler:     { imgW: 1102, imgH: 868,  placements: [{ cx: 220,  cy: 310, r: 130 }] },
-  // KitKat: circular face on the chocolate bar (center of image, slightly lower)
-  kitkat:    { imgW: 1028, imgH: 763,  placements: [{ cx: 460, cy: 420, r: 110, faceOpacity: 0.55 }] },
-  // Steering: face on the Porsche logo hub (center of wheel, lower half)
-  steering:  { imgW: 1316, imgH: 908,  placements: [{ cx: 658, cy: 560, r: 80, faceOpacity: 0.88 }] },
+  kitkat:    { imgW: 1028, imgH: 763,  placements: [{ cx: 470,  cy: 200, r: 130, faceOpacity: 0.55 }] },
+  steering:  { imgW: 1316, imgH: 908,  placements: [{ cx: 658,  cy: 570, r: 110, faceOpacity: 0.88 }] },
   sun:       { imgW: 698,  imgH: 680,  placements: [{ cx: 349,  cy: 340, r: 160 }] },
-  // Ghost: face in the ghost belly (no behindImage — PNG has solid bg so it won't show through)
-  ghost:     { imgW: 1232, imgH: 960,  placements: [{ cx: 616, cy: 530, r: 160, faceOpacity: 0.45 }] },
-  // Spark: translucent face centered on the spark burst
-  spark:     { imgW: 612,  imgH: 410,  placements: [{ cx: 306, cy: 205, r: 55, faceOpacity: 0.50 }] },
-  // Specs: circular face inside each lens
+  ghost:     { imgW: 1232, imgH: 960,  placements: [{ cx: 616,  cy: 560, r: 155, faceOpacity: 0.45 }] },
+  spark:     { imgW: 612,  imgH: 410,  placements: [{ cx: 306,  cy: 205, r: 55,  faceOpacity: 0.50 }] },
   specs:     { imgW: 600,  imgH: 337,  placements: [
-    { cx: 162, cy: 190, r: 68, faceOpacity: 0.45 },
-    { cx: 438, cy: 190, r: 68, faceOpacity: 0.45 },
+    { cx: 175, cy: 193, r: 46, faceOpacity: 0.50 },
+    { cx: 440, cy: 193, r: 46, faceOpacity: 0.50 },
   ]},
-  // Circle/roundabout: face on each of the 4 roads
   circle:    { imgW: 612,  imgH: 459,  placements: [
     { cx: 306, cy: 52,  r: 38, faceOpacity: 0.82 },
     { cx: 555, cy: 230, r: 38, faceOpacity: 0.82 },
