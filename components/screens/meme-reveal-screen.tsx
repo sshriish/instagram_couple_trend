@@ -429,36 +429,97 @@ function CloudIntro({
   );
 }
 
-const SCENE_FACE_CONFIG: Record<
-  string,
-  {
-    cx: number;
-    cy: number;
-    r: number;
-    imgW: number;
-    imgH: number;
-    behindImage?: boolean;
-    shape?: "circle" | "rect";
-    rectW?: number;
-    rectH?: number;
-    rotate?: number;
-    faceOpacity?: number;
-  }
-> = {
-  sofa:      { cx: 274, cy: 244, r: 155, imgW: 1372, imgH: 872 },
-  astronaut: { cx: 1020, cy: 298, r: 82, imgW: 1334, imgH: 896 },
-  clock:     { cx: 415, cy: 335, r: 220, imgW: 831, imgH: 1109, faceOpacity: 0.65 },
-  earth:     { cx: 640, cy: 476, r: 280, imgW: 1278, imgH: 952, faceOpacity: 0.55 },
-  bandaid:   { cx: 556, cy: 524, r: 0, imgW: 1112, imgH: 1049, shape: "rect", rectW: 280, rectH: 280, rotate: -40, faceOpacity: 0.95 },
-  ruler:     { cx: 220, cy: 310, r: 130, imgW: 1102, imgH: 868 },
-  kitkat:    { cx: 460, cy: 310, r: 0, imgW: 1028, imgH: 763, shape: "rect", rectW: 340, rectH: 220, rotate: 0, faceOpacity: 0.55 },
-  steering:  { cx: 658, cy: 290, r: 110, imgW: 1316, imgH: 908, behindImage: false, faceOpacity: 0.92 },
-  sun:       { cx: 349, cy: 340, r: 160, imgW: 698, imgH: 680 },
-  ghost:     { cx: 570, cy: 380, r: 190, imgW: 1232, imgH: 960, behindImage: false, faceOpacity: 0.92 },
-  spark:     { cx: 306, cy: 220, r: 70, imgW: 612,imgH: 410},
-  specs:     { cx: 300, cy: 176, r: 0, imgW: 600, imgH: 337, shape: "rect", rectW: 250, rectH: 120, rotate: 0, faceOpacity: 1},
- circle:     { cx: 306, cy: 230, r: 92, imgW: 612, imgH: 459, behindImage: false, faceOpacity: 1},
+type FacePlacement = {
+  cx: number;
+  cy: number;
+  r: number;
+  shape?: "circle" | "rect";
+  rectW?: number;
+  rectH?: number;
+  rotate?: number;
+  faceOpacity?: number;
 };
+
+type SceneConfig = {
+  imgW: number;
+  imgH: number;
+  behindImage?: boolean;
+  placements: FacePlacement[];
+};
+
+const SCENE_FACE_CONFIG: Record<string, SceneConfig> = {
+  sofa:      { imgW: 1372, imgH: 872,  placements: [{ cx: 274,  cy: 244, r: 155 }] },
+  astronaut: { imgW: 1334, imgH: 896,  placements: [{ cx: 1020, cy: 298, r: 82  }] },
+  clock:     { imgW: 831,  imgH: 1109, placements: [{ cx: 415,  cy: 335, r: 220, faceOpacity: 0.65 }] },
+  earth:     { imgW: 1278, imgH: 952,  placements: [{ cx: 640,  cy: 476, r: 280, faceOpacity: 0.55 }] },
+  bandaid:   { imgW: 1112, imgH: 1049, placements: [{ cx: 556,  cy: 524, r: 0, shape: "rect", rectW: 280, rectH: 280, rotate: -40, faceOpacity: 0.95 }] },
+  ruler:     { imgW: 1102, imgH: 868,  placements: [{ cx: 220,  cy: 310, r: 130 }] },
+  kitkat:    { imgW: 1028, imgH: 763,  placements: [{ cx: 460,  cy: 310, r: 0, shape: "rect", rectW: 340, rectH: 220, rotate: 0, faceOpacity: 0.55 }] },
+  steering:  { imgW: 1316, imgH: 908,  placements: [{ cx: 658,  cy: 290, r: 110, faceOpacity: 0.92 }] },
+  sun:       { imgW: 698,  imgH: 680,  placements: [{ cx: 349,  cy: 340, r: 160 }] },
+  ghost:     { imgW: 1232, imgH: 960,  behindImage: true, placements: [{ cx: 616, cy: 290, r: 145, faceOpacity: 0.85 }] },
+  spark:     { imgW: 612,  imgH: 410,  placements: [{ cx: 306, cy: 205, r: 55 }] },
+  specs:     { imgW: 600,  imgH: 337,  placements: [
+    { cx: 172, cy: 182, r: 0, shape: "rect", rectW: 148, rectH: 100, rotate: 0, faceOpacity: 0.45 },
+    { cx: 428, cy: 182, r: 0, shape: "rect", rectW: 148, rectH: 100, rotate: 0, faceOpacity: 0.45 },
+  ]},
+  circle:    { imgW: 612,  imgH: 459,  placements: [
+    { cx: 306, cy: 52,  r: 38, faceOpacity: 0.82 },
+    { cx: 555, cy: 230, r: 38, faceOpacity: 0.82 },
+    { cx: 306, cy: 412, r: 38, faceOpacity: 0.82 },
+    { cx: 57,  cy: 230, r: 38, faceOpacity: 0.82 },
+  ]},
+};
+
+function drawFaceOnCtx(
+  ctx: CanvasRenderingContext2D,
+  faceImg: HTMLImageElement,
+  placement: FacePlacement,
+  scale: number,
+  offsetX: number,
+  offsetY: number
+) {
+  const faceCX = placement.cx * scale - offsetX;
+  const faceCY = placement.cy * scale - offsetY;
+  const faceAlpha = placement.faceOpacity ?? 0.92;
+
+  ctx.save();
+  if (placement.shape === "rect") {
+    ctx.translate(faceCX, faceCY);
+    if (placement.rotate) ctx.rotate((placement.rotate * Math.PI) / 180);
+    const rw = (placement.rectW || 200) * scale;
+    const rh = (placement.rectH || 200) * scale;
+    ctx.beginPath();
+    ctx.rect(-rw / 2, -rh / 2, rw, rh);
+    ctx.clip();
+    const fScale = Math.max(rw / faceImg.naturalWidth, rh / faceImg.naturalHeight);
+    const fdw = faceImg.naturalWidth * fScale;
+    const fdh = faceImg.naturalHeight * fScale;
+    ctx.globalAlpha = faceAlpha;
+    ctx.drawImage(faceImg, -fdw / 2, -fdh / 2, fdw, fdh);
+    ctx.restore();
+  } else {
+    const faceR = placement.r * scale;
+    ctx.beginPath();
+    ctx.arc(faceCX, faceCY, faceR, 0, Math.PI * 2);
+    ctx.clip();
+    const fScale = Math.max((faceR * 2) / faceImg.naturalWidth, (faceR * 2) / faceImg.naturalHeight);
+    const fdw = faceImg.naturalWidth * fScale;
+    const fdh = faceImg.naturalHeight * fScale;
+    ctx.globalAlpha = faceAlpha;
+    ctx.drawImage(faceImg, faceCX - fdw / 2, faceCY - fdh / 2, fdw, fdh);
+    ctx.restore();
+    ctx.save();
+    ctx.globalAlpha = 1;
+    ctx.beginPath();
+    ctx.arc(faceCX, faceCY, faceR + 2, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(255,255,255,0.3)";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+}
 
 async function compositeOnCanvas(
   bgSrc: string,
@@ -490,70 +551,18 @@ async function compositeOnCanvas(
     const tryDraw = () => {
       if (!bgLoaded || !faceLoaded) return;
       try {
-        const faceCX = config.cx * scale - offsetX;
-        const faceCY = config.cy * scale - offsetY;
-        const faceAlpha = config.faceOpacity ?? 0.92;
-
         if (config.behindImage) {
-          ctx.save();
-          ctx.beginPath();
-          const faceR = config.r * scale;
-          ctx.arc(faceCX, faceCY, faceR, 0, Math.PI * 2);
-          ctx.clip();
-          const fScale = Math.max(
-            (faceR * 2) / faceImg.naturalWidth,
-            (faceR * 2) / faceImg.naturalHeight
-          );
-          const fdw = faceImg.naturalWidth * fScale;
-          const fdh = faceImg.naturalHeight * fScale;
-          ctx.globalAlpha = faceAlpha;
-          ctx.drawImage(faceImg, faceCX - fdw / 2, faceCY - fdh / 2, fdw, fdh);
-          ctx.restore();
+          for (const p of config.placements) {
+            drawFaceOnCtx(ctx, faceImg, p, scale, offsetX, offsetY);
+          }
           ctx.globalAlpha = 0.92;
           ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
           ctx.globalAlpha = 1;
-        } else if (config.shape === "rect") {
-          ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
-          ctx.save();
-          ctx.translate(faceCX, faceCY);
-          if (config.rotate) ctx.rotate((config.rotate * Math.PI) / 180);
-          const rw = (config.rectW || 200) * scale;
-          const rh = (config.rectH || 200) * scale;
-          ctx.beginPath();
-          ctx.rect(-rw / 2, -rh / 2, rw, rh);
-          ctx.clip();
-          const fScale = Math.max(
-            rw / faceImg.naturalWidth,
-            rh / faceImg.naturalHeight
-          );
-          const fdw = faceImg.naturalWidth * fScale;
-          const fdh = faceImg.naturalHeight * fScale;
-          ctx.globalAlpha = faceAlpha;
-          ctx.drawImage(faceImg, -fdw / 2, -fdh / 2, fdw, fdh);
-          ctx.restore();
-          ctx.globalAlpha = 1;
         } else {
-          const faceR = config.r * scale;
           ctx.drawImage(bgImg, -offsetX, -offsetY, config.imgW * scale, config.imgH * scale);
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(faceCX, faceCY, faceR, 0, Math.PI * 2);
-          ctx.clip();
-          const fScale = Math.max(
-            (faceR * 2) / faceImg.naturalWidth,
-            (faceR * 2) / faceImg.naturalHeight
-          );
-          const fdw = faceImg.naturalWidth * fScale;
-          const fdh = faceImg.naturalHeight * fScale;
-          ctx.globalAlpha = faceAlpha;
-          ctx.drawImage(faceImg, faceCX - fdw / 2, faceCY - fdh / 2, fdw, fdh);
-          ctx.restore();
-          ctx.globalAlpha = 1;
-          ctx.beginPath();
-          ctx.arc(faceCX, faceCY, faceR + 2, 0, Math.PI * 2);
-          ctx.strokeStyle = "rgba(255,255,255,0.3)";
-          ctx.lineWidth = 4;
-          ctx.stroke();
+          for (const p of config.placements) {
+            drawFaceOnCtx(ctx, faceImg, p, scale, offsetX, offsetY);
+          }
         }
 
         ctx.globalAlpha = 1;
