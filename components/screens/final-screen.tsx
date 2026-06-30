@@ -233,7 +233,7 @@ export default function FinalScreen({ userData, onNavigate }: FinalScreenProps) 
           className="mt-6 flex items-center gap-2"
         >
           <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm font-semibold">LITERALLY ME</span>
+          <span className="text-sm font-semibold">MemeUs</span>
           <Heart className="w-4 h-4 text-primary fill-primary" />
         </motion.div>
       </div>
