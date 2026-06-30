@@ -460,14 +460,14 @@ const SCENE_FACE_CONFIG: Record<string, SceneConfig> = {
   ghost:     { imgW: 1232, imgH: 960,  placements: [{ cx: 616,  cy: 560, r: 155, faceOpacity: 0.45 }] },
   spark:     { imgW: 612,  imgH: 410,  placements: [{ cx: 306,  cy: 205, r: 55,  faceOpacity: 0.50 }] },
   specs:     { imgW: 600,  imgH: 337,  placements: [
-    { cx: 221.4, cy: 171.3, r: 34.8, faceOpacity: 0.50 },
-    { cx: 378.6, cy: 171.3, r: 34.8, faceOpacity: 0.50 },
+    { cx: 221.4, cy: 171.3, r: 34.8, faceOpacity: 0.65 },
+    { cx: 378.6, cy: 171.3, r: 34.8, faceOpacity: 0.65 },
   ]},
   circle:    { imgW: 612,  imgH: 459,  placements: [
-    { cx: 348.1, cy: 26.8,  r: 26.8, faceOpacity: 0.85 },
-    { cx: 478.1, cy: 206.5, r: 26.8, faceOpacity: 0.85 },
-    { cx: 290.7, cy: 367.2, r: 26.8, faceOpacity: 0.85 },
-    { cx: 118.6, cy: 164.5, r: 26.8, faceOpacity: 0.85 },
+    { cx: 348.1, cy: 26.8,  r: 51, faceOpacity: 0.80 },
+    { cx: 478.1, cy: 206.5, r: 51, faceOpacity: 0.80 },
+    { cx: 290.7, cy: 367.2, r: 51, faceOpacity: 0.80 },
+    { cx: 118.6, cy: 164.5, r: 51, faceOpacity: 0.80 },
   ]},
 };
 
