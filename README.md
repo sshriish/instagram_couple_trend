@@ -1,4 +1,4 @@
-#  Memeus💀
+#  MemeUs💀
 ### Turn Your Face Into Emotional Damage
 
 > A viral couple meme web app — send your partner a unique link, have them upload their selfie, and watch as both your faces get dropped into a series of chaotic, relationship-coded memes.
