@@ -3,7 +3,7 @@
 
 > A viral couple meme web app — send your partner a unique link, have them upload their selfie, and watch as both your faces get dropped into a series of chaotic, relationship-coded memes.
 
-🔗 **[instagram-couple-trend.vercel.app](https://instagram-couple-trend.vercel.app/)**
+🔗 **[memeus.vercel.app](https://memeus.vercel.app/)**
 
 ---
 
